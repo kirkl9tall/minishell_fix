@@ -792,11 +792,13 @@ t_ex_f	ft_atoi_exit(const char *str)
 	return (res);
 }
 
-void exit_numeric_required (t_command *cmd)
+void exit_numeric_required (t_command *cmd,t_shell *shell)
 {
     ft_putstr_fd(cmd->args[0],2);
     ft_putstr_fd(cmd->args[1],2);
     ft_putstr_fd(" : numeric argument required\n",2);
+    close(shell->cmd->fd_origin);
+    close(shell->cmd->fd_origin_in);
     exit(2);
 }
 void exit_number(t_shell *shell,t_command *cmd)
@@ -808,9 +810,13 @@ void exit_number(t_shell *shell,t_command *cmd)
     if (s.flag == 1)
     {
         ft_putstr_fd("too many arguments\n",2);
+        close(shell->cmd->fd_origin);
+        close(shell->cmd->fd_origin_in);
         exit (2);
     }
     write (2,"exit\n",5);
+    close(shell->cmd->fd_origin);
+    close(shell->cmd->fd_origin_in);
     exit(shell->exit_statut);
 }
 
@@ -821,6 +827,8 @@ void exit_function(t_shell *shell , t_command *cmd)
     i = 0;
     if (size_counter(cmd->args) == 1)
     {
+        close(shell->cmd->fd_origin);
+        close(shell->cmd->fd_origin_in);
         write (2,"exit\n",5);
         exit(0);
     }
@@ -829,7 +837,7 @@ void exit_function(t_shell *shell , t_command *cmd)
         while (cmd->args[1][i])
         {
             if (ft_isalpha(cmd->args[1][i]))
-                exit_numeric_required(cmd);
+                exit_numeric_required(cmd,shell);
             i++;
         }
         exit_number(shell,cmd);
@@ -860,6 +868,8 @@ int check_func_buil (t_shell *shell,t_command *cmd)
         exit_function(shell,cmd);
     else
         return (0);
+    close(shell->cmd->fd_origin);
+    close(shell->cmd->fd_origin_in);
     return  (1); 
 }
 
@@ -973,7 +983,7 @@ void analyser_command (t_shell *shell,t_command *cmd)
     cmd->fd_out = 1;
     cmd->fd_in = 0;
     if (redirecter(shell,cmd) == 1)
-    exit(1);
+        exit(1);
     if (!cmd->args[0])
         exit(0);
     if (cmd->fd_out > 1)
@@ -1040,10 +1050,10 @@ void handle_pipes(t_shell *shell)
         pid[i]= fork();
         if (!pid[i])
         {
-            // if(shell->cmd->fd_origin > 2)
-            //     close(shell->cmd->fd_origin);
-            // if(shell->cmd->fd_origin_in > 2)
-            //     close(shell->cmd->fd_origin_in);
+            if(shell->cmd->fd_origin > 2)
+                close(shell->cmd->fd_origin);
+            if(shell->cmd->fd_origin_in > 2)
+                close(shell->cmd->fd_origin_in);
             if (i > 0)
             {
                 dup2(p, 0);
@@ -1053,13 +1063,14 @@ void handle_pipes(t_shell *shell)
             {
                 dup2(pipe_fd[1], 1);
                 close(pipe_fd[1]);
+                close(pipe_fd[0]);
             }
             free(pid);
             analyser_command(shell,cmd);
             exit(0);
         }
         if (p != -1)
-        close(p);
+            close(p);
         if (i < nb_cmd - 1)
         {
         close(pipe_fd[1]);
@@ -1074,6 +1085,8 @@ void handle_pipes(t_shell *shell)
         waitpid(pid[i],&shell->exit_statut,0);
         i++;
     }
+    if (p != -1)
+            close(p);       
     free(pid);
 }
 
@@ -1110,5 +1123,7 @@ int start(t_shell *shell)
     handle_pipes(shell);
     dup2(shell->cmd->fd_origin,1);
     dup2(shell->cmd->fd_origin_in,0);
+    close(shell->cmd->fd_origin);
+    close(shell->cmd->fd_origin_in);
     return 0;
 }
