@@ -993,7 +993,11 @@ int check_directory(t_command * cmd)
     if (stat(cmd->args[0],&buff) == 0)
     {
         if(S_ISDIR(buff.st_mode))
+        {   
+            ft_putstr_fd(cmd->args[0],2);
+            ft_putstr_fd(" : is a directory\n",2);
             return (1);
+        }
     }
     return (errno);
 }
@@ -1004,8 +1008,9 @@ void non_built_in(t_shell *shell , t_command *cmd)
 
     ret = check_directory(cmd); 
     if (ret != 0 && ret != 2)
-    {
-        perror("minishell");
+    {   
+        if (ret != 1)
+            perror("minishell");
         exit(126);
     }
     absolut_path(cmd);
