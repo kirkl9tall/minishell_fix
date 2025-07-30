@@ -6,7 +6,7 @@
 /*   By: abismail <abismail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 11:08:25 by a-khairi          #+#    #+#             */
-/*   Updated: 2025/07/28 11:09:06 by abismail         ###   ########.fr       */
+/*   Updated: 2025/07/30 20:48:13 by abismail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,15 @@ typedef struct s_env
 	char			*env;
 	struct s_env	*next;
 }	t_env;
+
+typedef struct s_hp
+{
+    int i;
+    int p;
+    int pipe_fd[2];
+    int *pid;
+    int nb_cmd;  
+}t_hp;
 
 typedef struct s_command
 {
@@ -210,5 +219,60 @@ void analyser_command (t_shell *shell,t_command *cmd);
 void free_all(t_shell *shell);
 t_shell *var_ali(void);
 int check_heredoc (t_shell * shell);
+char    *ft_find_env(t_env *env, const char *envi);
+int first_elem_unset(t_shell *shell, t_command *cmd);
+void unsetiha (t_shell *shell,t_command *cmd);
+void dup_close(t_command *cmd);
+int check_func_buil (t_shell *shell,t_command *cmd);
+void del_env(t_shell **cmd);
+void init_fds(t_shell * shell);
+int check_cmd(t_command *cmd);
+void analyser_command (t_shell *shell,t_command *cmd);
+void analyse_check_dups(t_command * cmd);
+void absolut_path(t_command * cmd);
+void env_p_null (t_command * cmd);
+void exit_relat_permission (t_command * cmd, int flag_permission);
+void exec_f_x_ok (t_command *cmd , char * axe);
+void relative_path (t_shell *shell, t_command  *cmd);
+int check_directory(t_command * cmd);
+void non_built_in(t_shell *shell , t_command *cmd);
+int red_two(t_shell * shell ,t_command *cmd, t_redirect * analyser);
+void  printer_echo (t_command * cmd,int flag_exist, int j);
+t_echo_f   flag_echo_mac (char *args,t_echo_f f);
+void echowiha(t_shell *shell,t_command * cmd);
+int ft_my_env(t_shell *shell, char *var);
+void p_doublviha(t_shell *shell,t_command * cmd);
+void cd_home(t_shell * shell, char *old_pwd);
+void chdiriha(t_shell * shell,t_command *cmd);
+void echo_no_flag (t_command *cmd, int j, int fd);
+void  echo_flag(t_command *cmd, int i, int fd);
+int flag_mini (char *args);
+char **conv_envs(t_env *env);
+void maj_pwd(t_shell *shell);
+int  maj_env (t_shell *shell, char *old_pwd);
+void    e_en_vi_ha (t_shell *shell,t_command *cmd);
+int size_counter (char ** args);
+int red_one(t_shell * shell ,t_command *cmd, t_redirect * analyser);
+int red_zero(t_shell * shell ,t_command *cmd, t_redirect * analyser);
+int redirection_mode (t_shell * shell ,t_command *cmd, t_redirect * analyser);
+int redirecter (t_shell *shell , t_command *cmd);
+int  scan_len_env (t_env *scaner);
+t_ex_f	ft_atoi_exit(const char *str);
+void exit_numeric_required (t_command *cmd,t_shell *shell);
+void exit_number(t_shell *shell,t_command *cmd);
+void exit_arg_three(t_shell *shell , t_command *cmd);
+void exit_function(t_shell *shell , t_command *cmd);
+void exporting (t_shell *shell,t_command *cmd);
+int env_similar(t_env *trav1,char * name,char * replace);
+int is_env_valid (char * args);
+int  is_it_alpha_valid (t_shell *shell,t_command *cmd, int i);
+int contain_equal(char * args);
+int     is_exist(t_env *env, const char *envi);
+t_env *new_node(char *content);
+void add_exp (t_env **env,char * content);
+char   **sort_declar_env(t_env * env);
+void print_export_declar(t_env * trav ,int fd_out);
+void error_export_valid_args(t_command * cmd);
+
 
 #endif

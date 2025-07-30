@@ -1,11 +1,21 @@
 #include "parsing_ali/minishell.h"
 
-
+void close_Aff_fds(int i)
+{
+    struct   stat fds;
+    while (i < 1024)
+    {
+        if (fstat(i, &fds) == 0)
+            close(i);
+        i++;
+    }
+}
 void signal_handler_here_doc(int sig)
 {
     (void)sig;
     write(1, "\n", 1);
-    free_all(var_ali());
+    // free_all(var_ali());
+    close_Aff_fds(3);
     exit(130);
 }
 
@@ -30,7 +40,6 @@ void open_heredz(t_shell *shell, t_command * analyser)
     // close(analyser->fd1_here);
     
 }
-
 void child_fill_herd(t_command * analyser,t_redirect * tmp)
 {
     char *line;
@@ -49,9 +58,10 @@ void child_fill_herd(t_command * analyser,t_redirect * tmp)
         write(analyser->fd_here, "\n", 1);
         free(line);
     }
-    close (analyser->fd_here);
-    close(analyser->fd_origin);
-    close(analyser->fd_origin_in);
+    close_Aff_fds(3);
+    // close (analyser->fd_here);
+    // close(analyser->fd_origin);
+    // close(analyser->fd_origin_in);
     exit(0);
 }
 

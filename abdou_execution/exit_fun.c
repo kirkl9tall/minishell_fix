@@ -1,0 +1,104 @@
+#include "parsing_ali/minishell.h"
+
+t_ex_f	ft_atoi_exit(const char *str)
+{
+	int	i;
+	int	sn;
+	long	rest;
+	t_ex_f res;
+	sn = 1;
+	rest = 0;
+	i = 0;
+	while ((str[i] >= 9 && str[i] <= 13) || str[i] == ' ')
+		i++;
+	if (str[i] == '+' || str[i] == '-')
+	{
+		if (str[i] == '-')
+			sn = -1;
+		i++;
+	}
+	while (str[i] && str[i] >= '0' && str[i] <= '9')
+	{
+		rest = rest * 10 + (str[i] - '0');
+		if (rest > INT_MAX   || rest < INT_MIN)
+			res.flag = 1;
+        i++;
+	}
+	res.res = rest *sn;
+	return (res);
+}
+
+void exit_numeric_required (t_command *cmd,t_shell *shell)
+{
+    ft_putstr_fd("exit\n",2);
+    ft_putstr_fd(cmd->args[0],2);
+    ft_putstr_fd(" : ",2);
+    ft_putstr_fd(cmd->args[1],2);
+    ft_putstr_fd(" : numeric argument required\n",2);
+    close(shell->cmd->fd_origin);
+    close(shell->cmd->fd_origin_in);
+    exit(2);
+}
+void exit_number(t_shell *shell,t_command *cmd)
+{
+    t_ex_f s;
+
+    s = ft_atoi_exit(cmd->args[1]);
+    shell->exit_statut = s.res;
+    if (s.flag == 1)
+    {
+        ft_putstr_fd("too many arguments\n",2);
+        close(shell->cmd->fd_origin);
+        close(shell->cmd->fd_origin_in);
+        exit (2);
+    }
+    write (2,"exit\n",5);
+    close(shell->cmd->fd_origin);
+    close(shell->cmd->fd_origin_in);
+    exit(shell->exit_statut);
+}
+void exit_arg_three(t_shell *shell , t_command *cmd)
+{  
+    int j;
+    int i;
+
+    i = 0;
+    while (cmd->args[i])
+    {
+        j = 0;
+        while (cmd->args[i][j])
+        {
+            if (ft_isalpha(cmd->args[1][i]))
+                exit_numeric_required(cmd,shell);
+            j++;
+        }
+        i++;
+    }
+    ft_putstr_fd("too many arguments\n",2);
+    shell->exit_statut = 1 << 8;
+}
+
+void exit_function(t_shell *shell , t_command *cmd)
+{
+    int i;
+
+    i = 0;
+    if (size_counter(cmd->args) == 1)
+    {
+        close(shell->cmd->fd_origin);
+        close(shell->cmd->fd_origin_in);
+        write (2,"exit\n",5);
+        exit(0);
+    }
+    else if (size_counter(cmd->args) == 2)
+    {
+        while (cmd->args[1][i])
+        {
+            if (ft_isalpha(cmd->args[1][i]))
+                exit_numeric_required(cmd,shell);
+            i++;
+        }
+        exit_number(shell,cmd);
+    }
+    exit_arg_three(shell,cmd);
+}

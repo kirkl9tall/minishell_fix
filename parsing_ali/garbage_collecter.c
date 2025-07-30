@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   garbage_collecter.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: a-khairi <a-khairi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: abismail <abismail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/23 21:14:17 by a-khairi          #+#    #+#             */
-/*   Updated: 2025/07/24 11:04:38 by a-khairi         ###   ########.fr       */
+/*   Updated: 2025/07/30 20:52:14 by abismail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,8 +58,10 @@ void	gr_t(void *str, int flag)
 		else
 			add_back(gr, new);
 	}
-	else if (flag == 0)
+	else
 	{
 		gr = free_gc_list(gr);
+		if(flag)
+			exit(2); //? free env
 	}
 }
