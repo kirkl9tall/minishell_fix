@@ -209,5 +209,6 @@ int start(t_shell *shell);
 void analyser_command (t_shell *shell,t_command *cmd);
 void free_all(t_shell *shell);
 t_shell *var_ali(void);
+int check_heredoc (t_shell * shell);
 
 #endif

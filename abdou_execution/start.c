@@ -28,85 +28,92 @@ void free_all(t_shell *shell)
     (void)shell;
     // printf("this is the fucntion to free %s\n", shell->line);
 }
-void signal_handler_here_doc(int sig)
-{
-    (void)sig;
-    write(1, "\n", 1);
-    free_all(var_ali());
-    exit(130);
-}
+// void signal_handler_here_doc(int sig)
+// {
+//     (void)sig;
+//     write(1, "\n", 1);
+//     free_all(var_ali());
+//     exit(130);
+// }
 
-void open_heredz(t_shell *shell, t_command * analyser)
-{
-    analyser->fd_here = open(shell->rend.rnd_3,O_CREAT | O_WRONLY | O_TRUNC, 0644);
-    analyser->fd1_here = open(shell->rend.rnd_3, O_RDONLY);
-    if (  analyser->fd_here == -1 ||   analyser->fd1_here== -1 )
-        perror("");
-    unlink(shell->rend.rnd_3);
-}
+// void open_heredz(t_shell *shell, t_command * analyser)
+// {
+//     if (analyser->fd_here != -1)
+//         close (analyser->fd_here);
+//     if (analyser->fd1_here != -1)
+//         close (analyser->fd1_here);
+//     analyser->fd_here = open(shell->rend.rnd_3,O_CREAT | O_WRONLY | O_TRUNC, 0644);
+//     analyser->fd1_here = open(shell->rend.rnd_3, O_RDONLY);
+//     if (  analyser->fd_here == -1 ||   analyser->fd1_here== -1 )
+//         perror("");
+//     unlink(shell->rend.rnd_3);
+// }
 
-void child_fill_herd(t_command * analyser,t_redirect * tmp)
-{
-    close(analyser->fd1_here);
-    signal(SIGINT, signal_handler_here_doc);
-    char *line;
-    while (1)
-    {
-        signal(SIGQUIT, SIG_DFL);
-        line = readline("herdoc > ");
-        if (!line)
-            break;
-        if (ft_strcmp(line, tmp->delimiter) == 0)
-            break;
-        write(analyser->fd_here, line, ft_strlen(line));
-        write(analyser->fd_here, "\n", 1);
-        free(line);
-    }
-    close (analyser->fd_here);
-    // close (analyser->fd1_here);
-    exit(0);
-}
+// void child_fill_herd(t_command * analyser,t_redirect * tmp)
+// {
+//     close(analyser->fd1_here);
+//     signal(SIGINT, signal_handler_here_doc);
+//     char *line;
+//     while (1)
+//     {
+//         signal(SIGQUIT, SIG_DFL);
+//         line = readline("herdoc > ");
+//         if (!line)
+//             break;
+//         if (ft_strcmp(line, tmp->delimiter) == 0)
+//             break;
+//         write(analyser->fd_here, line, ft_strlen(line));
+//         write(analyser->fd_here, "\n", 1);
+//         free(line);
+//     }
+//     close (analyser->fd_here);
+//     // close (analyser->fd1_here);
+//     close(analyser->fd_origin);
+//     close(analyser->fd_origin_in);
+//     exit(0);
+// }
 
-int trav_reds(t_shell * shell,t_command * analyser ,t_redirect * tmp)
-{
-    while  (tmp)
-    {
-        if (tmp->type == 3)
-        {
-            open_heredz(shell,analyser);
-            int pid = fork();
-            if (pid == 0)
-            {
-                child_fill_herd(analyser,tmp);
-            }
-             if (analyser->fd_here > 0)
-                close(analyser->fd_here);
-            waitpid(pid, &shell->exit_statut, 0);
-            if (WEXITSTATUS(shell->exit_statut) == 130)
-            {
-               return (1) ; 
-            }
-        }
-        tmp = tmp->next;
-    }  
-    return 0; 
-}
-int check_heredoc (t_shell * shell)
-{
-    t_command *analyser;
-    t_redirect *tmp;
-    analyser = shell->cmd;
-    analyser->fd1_here = -1;
-    analyser->fd_here = -1;
-    while (analyser)
-    {
-        tmp = analyser->redirects;
-        if (trav_reds(shell,analyser,tmp))
-            return 1;
-        analyser = analyser->next;
-    }
-    return 0;
-}
+// int trav_reds(t_shell * shell,t_command * analyser ,t_redirect * tmp)
+// {
+//     while  (tmp)
+//     {
+//         if (tmp->type == 3)
+//         {
+//             open_heredz(shell,analyser);
+//             int pid = fork();
+//             if (pid == 0)
+//             {
+//                 child_fill_herd(analyser,tmp);
+//             }
+//              if (analyser->fd_here > 0)
+//                 close(analyser->fd_here);
+//             waitpid(pid, &shell->exit_statut, 0);
+//             if (WEXITSTATUS(shell->exit_statut) == 130)
+//             {
+//                return (1) ; 
+//             }
+//         }
+//         tmp = tmp->next;
+//     }  
+//     return 0; 
+// }
+
+// int check_heredoc (t_shell * shell)
+// {
+//     t_command *analyser;
+//     t_redirect *tmp;
+//     analyser = shell->cmd;
+//     analyser->fd1_here = -1;
+//     analyser->fd_here = -1;
+//     while (analyser)
+//     {
+//         tmp = analyser->redirects;
+//         if (trav_reds(shell,analyser,tmp))
+//             return 1;
+//         analyser = analyser->next;
+//     }
+//     return 0;
+// }
 
 // int red_(t_shell * shell ,t_command *cmd, t_redirect * analyser)
 int red_two(t_shell * shell ,t_command *cmd, t_redirect * analyser)
@@ -170,7 +177,11 @@ int redirection_mode (t_shell * shell ,t_command *cmd, t_redirect * analyser)
             return (1);
     }
     else if (analyser->type == 3) 
-        cmd->fd_in = cmd->fd1_here;  
+    {
+        cmd->fd_in =  dup(cmd->fd1_here);  
+        close (cmd->fd1_here);
+        dprintf(2," 3 check check check %d\n",cmd->fd_in);
+    }
     return (0);
 }
 
@@ -179,8 +190,11 @@ int redirecter (t_shell *shell , t_command *cmd)
     t_redirect *analyser;
 
     analyser = cmd->redirects;
+    dprintf(2," 2 check check check %d\n",cmd->fd_in);
+    
     if (analyser)
-    {
+    {            
+
         while (analyser)
         {
             if (redirection_mode (shell,cmd,analyser) == 1)
@@ -984,7 +998,7 @@ void analyser_command (t_shell *shell,t_command *cmd)
     cmd->fd_in = 0;
     if (redirecter(shell,cmd) == 1)
         exit(1);
-    if (!cmd->args[0])
+    if (!cmd->args)
         exit(0);
     if (cmd->fd_out > 1)
     {
@@ -1024,7 +1038,14 @@ int check_cmd(t_command *cmd)
         trav = trav->next;
     }
     if (cmd->redirects)
-        i++;
+    {
+        while (cmd->redirects)
+        {
+            if (cmd->redirects->type != 3)
+                i++;
+            cmd->redirects = cmd->redirects->next;
+        }
+    }
     return i ;
 }
 void handle_pipes(t_shell *shell)
@@ -1109,7 +1130,18 @@ int start(t_shell *shell)
         return (0);
     int f = check_cmd(shell->cmd);
     if (!f)
+    {
+        while (shell->cmd)
+        {
+            if(shell->cmd->fd_here != -1)
+                close (shell->cmd->fd1_here);
+            if(shell->cmd->fd1_here != -1)
+                close (shell->cmd->fd1_here);
+            shell->cmd = shell->cmd->next;
+        }
         return 0;
+    }
+    dprintf(2,"check  1 check check %d\n",shell->cmd->fd_in);
     nbr_pipe = pipe_nbr(shell->cmd);
     if (nbr_pipe == 0)
     {

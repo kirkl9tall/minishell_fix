@@ -22,6 +22,7 @@ SRCS = parsing_ali/check_ambiguous.c \
 	   parsing_ali/pars_herdoc.c \
 		abdou_execution/start.c \
 		abdou_execution/piper.c \
+		abdou_execution/heredoc.c \
 
 
 OBJS = $(SRCS:.c=.o)
