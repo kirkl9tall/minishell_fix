@@ -180,7 +180,6 @@ int redirection_mode (t_shell * shell ,t_command *cmd, t_redirect * analyser)
     {
         cmd->fd_in =  dup(cmd->fd1_here);  
         close (cmd->fd1_here);
-        dprintf(2," 3 check check check %d\n",cmd->fd_in);
     }
     return (0);
 }
@@ -190,8 +189,6 @@ int redirecter (t_shell *shell , t_command *cmd)
     t_redirect *analyser;
 
     analyser = cmd->redirects;
-    dprintf(2," 2 check check check %d\n",cmd->fd_in);
-    
     if (analyser)
     {            
 
@@ -272,45 +269,44 @@ char **conv_envs(t_env *env)
 //     }
 
 // }
+void maj_pwd(t_shell *shell)
+{
+    t_env  *search;
+    char * pwd;
+
+    search = shell->env;
+    while (search)
+    {
+     if (ft_find_env(search,"PWD"))
+     {
+         pwd = getcwd(NULL,0);
+         free(search->env);
+         search->env = ft_strjoin("PWD=", pwd);
+     }
+     search = search->next;
+    }
+}
 int  maj_env (t_shell *shell, char *old_pwd)
 {
-    t_env *searcher;
-    int  i = 0;
-    char **conv = conv_envs(shell->env);
-    char *conc = NULL;
-    char  new_pwd[1000];
-    char **name;
-    searcher = shell->env;
-    while (searcher->next)
+   t_env  *search;
+
+   search = shell->env;
+   while (search)
+   {
+    if (ft_find_env(search,"OLDPWD"))
     {
-        name = ft_split(conv[i],'=');
-        if (ft_strcmp(name[0],"OLDPWD") == 0)
+        free(search->env);
+        if (!old_pwd)
         {
-            if (!old_pwd)
-            {
-                conc = ft_strjoin(conc,"OLDPWD");
-                ft_bzero(searcher->env,ft_strlen(searcher->env));
-                searcher->env = ft_strjoin(searcher->env,conc);
-                return 0 ;
-            }
-            conc = ft_strjoin(conc,"OLDPWD=");
-            conc = ft_strjoin(conc, old_pwd);
-            ft_bzero(searcher->env,ft_strlen(searcher->env));
-            searcher->env = ft_strjoin(searcher->env,conc);
-            conc = NULL;
+            search->env = ft_strdup("OLDPWD");
+            return (0);
         }
-        else if (ft_strcmp(name[0],"PWD") == 0)
-        {
-            conc = ft_strjoin(conc,"PWD=");
-            conc = ft_strjoin(conc, getcwd(new_pwd,1000));
-            ft_bzero(searcher->env,ft_strlen(searcher->env));
-            searcher->env = ft_strjoin(searcher->env,conc);
-            conc = NULL;
-        }
-        searcher = searcher->next;
-        i++;
+        search->env = ft_strjoin("OLDPWD=", old_pwd);
     }
-    return 0;
+    search = search->next;
+   }
+   maj_pwd(shell);
+   return (0);
 }
 
 void    e_en_vi_ha (t_shell *shell,t_command *cmd)
@@ -808,7 +804,9 @@ t_ex_f	ft_atoi_exit(const char *str)
 
 void exit_numeric_required (t_command *cmd,t_shell *shell)
 {
+    ft_putstr_fd("exit\n",2);
     ft_putstr_fd(cmd->args[0],2);
+    ft_putstr_fd(" : ",2);
     ft_putstr_fd(cmd->args[1],2);
     ft_putstr_fd(" : numeric argument required\n",2);
     close(shell->cmd->fd_origin);
@@ -833,6 +831,26 @@ void exit_number(t_shell *shell,t_command *cmd)
     close(shell->cmd->fd_origin_in);
     exit(shell->exit_statut);
 }
+void exit_arg_three(t_shell *shell , t_command *cmd)
+{  
+    int j;
+    int i;
+
+    i = 0;
+    while (cmd->args[i])
+    {
+        j = 0;
+        while (cmd->args[i][j])
+        {
+            if (ft_isalpha(cmd->args[1][i]))
+                exit_numeric_required(cmd,shell);
+            j++;
+        }
+        i++;
+    }
+    ft_putstr_fd("too many arguments\n",2);
+    shell->exit_statut = 1 << 8;
+}
 
 void exit_function(t_shell *shell , t_command *cmd)
 {
@@ -856,10 +874,15 @@ void exit_function(t_shell *shell , t_command *cmd)
         }
         exit_number(shell,cmd);
     }
-    ft_putstr_fd("too many arguments\n",2);
-    shell->exit_statut = 1 << 8;
+    exit_arg_three(shell,cmd);
 }
-
+void dup_close(t_command *cmd)
+{
+    dup2(cmd->fd_origin,1);
+    dup2(cmd->fd_origin_in,0);
+    close(cmd->fd_origin);
+    close(cmd->fd_origin_in);
+}
 int check_func_buil (t_shell *shell,t_command *cmd)
 {
     if (shell->cmd->args == NULL)
@@ -882,8 +905,7 @@ int check_func_buil (t_shell *shell,t_command *cmd)
         exit_function(shell,cmd);
     else
         return (0);
-    close(shell->cmd->fd_origin);
-    close(shell->cmd->fd_origin_in);
+    dup_close(cmd);
     return  (1); 
 }
 
@@ -989,18 +1011,9 @@ void non_built_in(t_shell *shell , t_command *cmd)
     absolut_path(cmd);
     relative_path (shell,cmd);
 }
-
-void analyser_command (t_shell *shell,t_command *cmd)
+void analyse_check_dups(t_command * cmd)
 {
-    signal(SIGINT, shell->defau_sigc);
-    signal(SIGQUIT, shell->defau_sigq);
-    cmd->fd_out = 1;
-    cmd->fd_in = 0;
-    if (redirecter(shell,cmd) == 1)
-        exit(1);
-    if (!cmd->args)
-        exit(0);
-    if (cmd->fd_out > 1)
+ if (cmd->fd_out > 1)
     {
         dup2(cmd->fd_out,1);
         close (cmd->fd_out);
@@ -1012,11 +1025,29 @@ void analyser_command (t_shell *shell,t_command *cmd)
         close (cmd->fd_in);
         cmd->fd_in = 0;
     }
+}
+void analyser_command (t_shell *shell,t_command *cmd)
+{
+    signal(SIGINT, shell->defau_sigc);
+    signal(SIGQUIT, shell->defau_sigq);
+    cmd->fd_out = 1;
+    cmd->fd_in = 0;
+    if (redirecter(shell,cmd) == 1)
+        exit(1);
+         if (!cmd->args)
+        exit(0);
+    if (!cmd->args[0][0])
+    {
+        write(2, "Command not found\n", 18);
+        exit(0);
+    }
+    analyse_check_dups(cmd);
     if (check_func_buil(shell,cmd) == 1)
         exit(shell->exit_statut >> 8);
     cmd->conv_env = conv_envs(shell->env);
     non_built_in(shell,cmd);
 }
+
 
 void signal_handler_child()
 {
@@ -1048,67 +1079,79 @@ int check_cmd(t_command *cmd)
     }
     return i ;
 }
-void handle_pipes(t_shell *shell)
+// void dup_child_pipe(t_shell * shell)
+// {
+
+// }
+typedef struct s_hp
 {
     int i;
     int p;
     int pipe_fd[2];
     int *pid;
-    int nb_cmd;
+    int nb_cmd;  
+}t_hp;
+
+void handle_pipes(t_shell *shell)
+{
+    t_hp s;
+
+    int pipe_fd[2];
     t_command *cmd;
 
     cmd = shell->cmd;
-    nb_cmd = pipe_nbr(cmd) + 1;
-    pid = malloc(nb_cmd * sizeof(int));
-    if (!pid)
+    s.nb_cmd = pipe_nbr(cmd) + 1;
+    s.pid = malloc(s.nb_cmd * sizeof(int));
+    if (!s.pid)
         exit(2);
-    i = 0;
-    p = -1;
-    while (i < nb_cmd && cmd)
+    s.i = 0;
+    s.p = -1;
+    while (s.i < s.nb_cmd && cmd)
     {
-        if (i < nb_cmd - 1)
+        if (s.i < s.nb_cmd - 1)
             pipe(pipe_fd);
-        pid[i]= fork();
-        if (!pid[i])
+        s.pid[s.i]= fork();
+        if (!s.pid[s.i])
         {
             if(shell->cmd->fd_origin > 2)
                 close(shell->cmd->fd_origin);
             if(shell->cmd->fd_origin_in > 2)
                 close(shell->cmd->fd_origin_in);
-            if (i > 0)
+            if (s.i > 0)
             {
-                dup2(p, 0);
-                close(p);
+                dup2(s.p, 0);
+                close(s.p);
             }
-            if (i < nb_cmd - 1)
+            if (s.i < s.nb_cmd - 1)
             {
                 dup2(pipe_fd[1], 1);
                 close(pipe_fd[1]);
                 close(pipe_fd[0]);
             }
-            free(pid);
+            free(s.pid);
             analyser_command(shell,cmd);
             exit(0);
         }
-        if (p != -1)
-            close(p);
-        if (i < nb_cmd - 1)
+        if (s.p != -1)
+            close(s.p);
+        if (s.i < s.nb_cmd - 1)
         {
         close(pipe_fd[1]);
-        p = pipe_fd[0];
+        s.p = pipe_fd[0];
         }
-        i++;
+        s.i++;
         cmd = cmd->next;
     }
-    i = 0;
-    while (i < nb_cmd)
+    
+    s.i = 0;
+    while (s.i < s.nb_cmd)
     {
-        waitpid(pid[i],&shell->exit_statut,0);
-        i++;
+        waitpid(s.pid[s.i],&shell->exit_statut,0);
+        s.i++;
     }
-    if (p != -1)
-            close(p);       
-    free(pid);
+    if (s.p != -1)
+            close(s.p);       
+    free(s.pid);
 }
 
 void init_fds(t_shell * shell)
@@ -1126,22 +1169,21 @@ int start(t_shell *shell)
     // analyzer = shell->cmd;
     init_fds(shell);
     signal(SIGINT,SIG_IGN);
-    if (check_heredoc(shell))
-        return (0);
-    int f = check_cmd(shell->cmd);
-    if (!f)
-    {
-        while (shell->cmd)
-        {
-            if(shell->cmd->fd_here != -1)
-                close (shell->cmd->fd1_here);
-            if(shell->cmd->fd1_here != -1)
-                close (shell->cmd->fd1_here);
-            shell->cmd = shell->cmd->next;
-        }
-        return 0;
-    }
-    dprintf(2,"check  1 check check %d\n",shell->cmd->fd_in);
+    // if (check_heredoc(shell))
+    //     return (0);
+    // int f = check_cmd(shell->cmd);
+    // if (!f)
+    // {
+    //     while (shell->cmd)
+    //     {
+    //         if(shell->cmd->fd_here != -1)
+    //             close (shell->cmd->fd1_here);
+    //         if(shell->cmd->fd1_here != -1)
+    //             close (shell->cmd->fd1_here);
+    //         shell->cmd = shell->cmd->next;
+    //     }
+    //     return 0;
+    // }
     nbr_pipe = pipe_nbr(shell->cmd);
     if (nbr_pipe == 0)
     {
