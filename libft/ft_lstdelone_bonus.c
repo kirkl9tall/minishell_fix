@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstdelone.c                                     :+:      :+:    :+:   */
+/*   ft_lstdelone_bonus.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: a-khairi <a-khairi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: abismail <abismail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 20:19:40 by a-khairi          #+#    #+#             */
-/*   Updated: 2024/11/07 20:41:21 by a-khairi         ###   ########.fr       */
+/*   Updated: 2025/07/30 21:21:25 by abismail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,8 @@ void	ft_lstdelone(t_list *lst, void (*del)(void *))
 	if (!lst)
 		return ;
 	del(lst->content);
-	free(lst);
+	// free(lst);
+	lst = NULL;
 }
 
 /*int main ()

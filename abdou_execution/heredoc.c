@@ -56,7 +56,8 @@ void child_fill_herd(t_command * analyser,t_redirect * tmp)
             break;
         write(analyser->fd_here, line, ft_strlen(line));
         write(analyser->fd_here, "\n", 1);
-        free(line);
+        // free(line);
+        line = NULL;
     }
     close_Aff_fds(3);
     // close (analyser->fd_here);

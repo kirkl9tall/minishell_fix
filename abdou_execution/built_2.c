@@ -8,7 +8,8 @@ void del_env(t_shell **cmd)
     plo = *cmd;
     trash = plo->env->next;
     plo->env->next = plo->env->next->next;
-    free(trash);
+    // free(trash);
+    trash = NULL;
 }
 
 void init_fds(t_shell * shell)

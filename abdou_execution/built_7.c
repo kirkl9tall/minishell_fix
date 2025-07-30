@@ -10,13 +10,13 @@ char **conv_envs(t_env *env)
     scaner = env;
     i = scan_len_env(env);
     envs = malloc(sizeof(char *)*i + 8);
-    // gr_t(envs , 1);
+    gr_t(envs , 0);
     i = 0;
     while (scaner)
     {
         len = ft_strlen(env->env);
         envs[i] = malloc(len + 1);
-        // gr_t(envs[i] , 1);
+        gr_t(envs[i] , 0);
         ft_bzero(envs[i],len +1);
         envs[i] = ft_strjoin(envs[i],scaner->env);
         i++;
@@ -37,9 +37,9 @@ void maj_pwd(t_shell *shell)
      if (ft_find_env(search,"PWD"))
      {
          pwd = getcwd(NULL,0);
-        // gr_t(pwd , 1);
-        // search->env = NULL;
-         free(search->env);
+        gr_t(pwd , 1);
+        search->env = NULL;
+        //  free(search->env);
          search->env = ft_strjoin("PWD=", pwd);
      }
      search = search->next;
@@ -54,7 +54,8 @@ int  maj_env (t_shell *shell, char *old_pwd)
    {
     if (ft_find_env(search,"OLDPWD"))
     {
-        free(search->env);
+        // free(search->env);
+        search->env = NULL; //?
         if (!old_pwd)
         {
             search->env = ft_strdup("OLDPWD");

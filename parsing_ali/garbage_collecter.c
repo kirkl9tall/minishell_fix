@@ -6,7 +6,7 @@
 /*   By: abismail <abismail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/23 21:14:17 by a-khairi          #+#    #+#             */
-/*   Updated: 2025/07/30 20:52:14 by abismail         ###   ########.fr       */
+/*   Updated: 2025/07/30 21:06:15 by abismail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ void	gr_t(void *str, int flag)
 	else
 	{
 		gr = free_gc_list(gr);
-		if(flag)
+		if(!flag)
 			exit(2); //? free env
 	}
 }

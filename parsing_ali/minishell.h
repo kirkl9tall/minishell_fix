@@ -6,7 +6,7 @@
 /*   By: abismail <abismail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 11:08:25 by a-khairi          #+#    #+#             */
-/*   Updated: 2025/07/30 20:48:13 by abismail         ###   ########.fr       */
+/*   Updated: 2025/07/30 21:50:39 by abismail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -229,9 +229,9 @@ void init_fds(t_shell * shell);
 int check_cmd(t_command *cmd);
 void analyser_command (t_shell *shell,t_command *cmd);
 void analyse_check_dups(t_command * cmd);
-void absolut_path(t_command * cmd);
-void env_p_null (t_command * cmd);
-void exit_relat_permission (t_command * cmd, int flag_permission);
+void absolut_path(t_shell *shell, t_command * cmd);
+void env_p_null (t_shell *shell, t_command * cmd);
+void exit_relat_permission (t_shell *shell,t_command * cmd, int flag_permission);
 void exec_f_x_ok (t_command *cmd , char * axe);
 void relative_path (t_shell *shell, t_command  *cmd);
 int check_directory(t_command * cmd);
@@ -273,6 +273,10 @@ void add_exp (t_env **env,char * content);
 char   **sort_declar_env(t_env * env);
 void print_export_declar(t_env * trav ,int fd_out);
 void error_export_valid_args(t_command * cmd);
-
+int pipe_nbr(t_command *cmd);
+int  dupper(t_command *cmd);
+void signal_handler_child();
+void handle_pipes(t_shell *shell);
+void free_env(t_env *env);
 
 #endif

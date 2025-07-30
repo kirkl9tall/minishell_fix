@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: a-khairi <a-khairi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: abismail <abismail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 15:15:31 by a-khairi          #+#    #+#             */
-/*   Updated: 2025/07/24 11:08:02 by a-khairi         ###   ########.fr       */
+/*   Updated: 2025/07/30 21:13:51 by abismail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,9 @@ static char	*ft_strdup1(const char *str, int start, int end)
 
 	i = 0;
 	copy = malloc(end - start + 1);
-	if (!copy)
-		return (NULL);
+	gr_t(copy , 0);
+	// if (!copy)
+	// 	return (NULL);
 	while (start < end)
 		copy[i++] = str[start++];
 	copy[i] = '\0';
@@ -99,8 +100,9 @@ char	**ft_split(const char *str, char c)
 		return (NULL);
 	size = (count_word(str, c) + 1);
 	p = malloc(sizeof(char *) * size);
-	if (!p)
-		return (NULL);
+    gr_t(p , 0);
+	// if (!p)
+	// 	return (NULL);
 	p[size - 1] = NULL;
 	free_malloc(p, str, c);
 	return (p);

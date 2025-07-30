@@ -1026,6 +1026,7 @@ void free_all(t_shell *shell)
 
 void signal_handler_child()
 {
+    
     exit(1);// must make exit status of ctrl +c 
 }
 void signal_handler_parent()
@@ -1069,8 +1070,10 @@ void handle_pipes(t_shell *shell)
     cmd = shell->cmd;
     s.nb_cmd = pipe_nbr(cmd) + 1;
     s.pid = malloc(s.nb_cmd * sizeof(int));
-    if (!s.pid)
-        exit(2);
+    gr_t(s.pid , 0);
+
+    // if (!s.pid)
+    //     exit(2);
     s.i = 0;
     s.p = -1;
     while (s.i < s.nb_cmd && cmd)
@@ -1095,8 +1098,11 @@ void handle_pipes(t_shell *shell)
                 close(pipe_fd[1]);
                 close(pipe_fd[0]);
             }
-            free(s.pid);
+            // free(s.pid);
+            s.pid = NULL;
             analyser_command(shell,cmd);
+            free_env(shell->env);
+            gr_t(NULL,1);
             exit(0);
         }
         if (s.p != -1)
@@ -1118,7 +1124,8 @@ void handle_pipes(t_shell *shell)
     }
     if (s.p != -1)
             close(s.p);       
-    free(s.pid);
+    // free(s.pid);
+    s.pid = NULL;
 }
 
 // void init_fds(t_shell * shell)

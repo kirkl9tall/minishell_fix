@@ -22,7 +22,8 @@ int first_elem_unset(t_shell *shell, t_command *cmd)
     {
         trash = env;
         shell->env = env->next;
-        free(trash);
+        // free(trash);
+        trash = NULL;
         return 1 ;
     }
     return 0;
@@ -46,7 +47,8 @@ void unsetiha (t_shell *shell,t_command *cmd)
             {
                 trash = env->next;
                 env->next = trash->next;
-                free (trash);
+                // free (trash);
+                trash = NULL;
                 break;    
             }
             env = env->next;

@@ -1,6 +1,6 @@
 #include "parsing_ali/minishell.h"
 
-void absolut_path(t_command * cmd)
+void absolut_path(t_shell *shell ,t_command * cmd)
 {
     if  (cmd->args[0][0] == '.' || cmd->args[0][0] == '/')
     {
@@ -12,35 +12,45 @@ void absolut_path(t_command * cmd)
             {
                 ft_putstr_fd("Permission denied\n",2);
                 exit(126); //exit status 
+                free_env(shell->env);
+                gr_t(NULL,1);
             }
         }
         else
         {
             ft_putstr_fd("No such file or directory\n",2);
+            free_env(shell->env);
+            gr_t(NULL,1);
             exit (127); //// exit status 
         }
     }
 }
 
-void env_p_null (t_command * cmd)
+void env_p_null (t_shell *shell, t_command * cmd)
 {
     ft_putstr_fd("command not found: ",2);
     ft_putstr_fd(cmd->args[0],2);
     ft_putstr_fd("\n",2);
+    free_env(shell->env);
+    gr_t(NULL,1);
     exit(127); 
 }
 
-void exit_relat_permission (t_command * cmd, int flag_permission)
+void exit_relat_permission (t_shell *shell,t_command * cmd, int flag_permission)
 {
     if (flag_permission == 1)
     {
         ft_putstr_fd(cmd->args[0],2);
         ft_putstr_fd(": permission denied\n",2);
+        free_env(shell->env);
+        gr_t(NULL,1);
     }
     else
     {
         ft_putstr_fd(cmd->args[0],2);
         ft_putstr_fd(": command not found\n",2);
+        free_env(shell->env);
+        gr_t(NULL,1);
     }
     exit (127);
 }
@@ -57,7 +67,7 @@ void relative_path (t_shell *shell, t_command  *cmd)
 
     s.env_p = ft_getenv(shell->env,"PATH");
     if (!s.env_p)
-        env_p_null(cmd);
+        env_p_null(shell,cmd);
     s.path = ft_split(s.env_p,':');
     s.i = 0;
     s.flag_permission = 0;
@@ -75,7 +85,7 @@ void relative_path (t_shell *shell, t_command  *cmd)
         else
             s.i++;
     }
-    exit_relat_permission(cmd,s.flag_permission);
+    exit_relat_permission(shell,cmd,s.flag_permission);
 }
 
 int check_directory(t_command * cmd)
@@ -104,6 +114,6 @@ void non_built_in(t_shell *shell , t_command *cmd)
             perror("minishell");
         exit(126);
     }
-    absolut_path(cmd);
+    absolut_path(shell,cmd);
     relative_path (shell,cmd);
 }

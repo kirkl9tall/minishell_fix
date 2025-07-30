@@ -37,6 +37,8 @@ void exit_numeric_required (t_command *cmd,t_shell *shell)
     ft_putstr_fd(" : numeric argument required\n",2);
     close(shell->cmd->fd_origin);
     close(shell->cmd->fd_origin_in);
+    free_env(shell->env);
+    gr_t(NULL,1);
     exit(2);
 }
 void exit_number(t_shell *shell,t_command *cmd)
@@ -50,11 +52,15 @@ void exit_number(t_shell *shell,t_command *cmd)
         ft_putstr_fd("too many arguments\n",2);
         close(shell->cmd->fd_origin);
         close(shell->cmd->fd_origin_in);
+        free_env(shell->env);
+        gr_t(NULL,1);
         exit (2);
     }
     write (2,"exit\n",5);
     close(shell->cmd->fd_origin);
     close(shell->cmd->fd_origin_in);
+    free_env(shell->env);
+    gr_t(NULL,1);
     exit(shell->exit_statut);
 }
 void exit_arg_three(t_shell *shell , t_command *cmd)
@@ -88,6 +94,8 @@ void exit_function(t_shell *shell , t_command *cmd)
         close(shell->cmd->fd_origin);
         close(shell->cmd->fd_origin_in);
         write (2,"exit\n",5);
+        free_env(shell->env);
+        gr_t(NULL,1);
         exit(0);
     }
     else if (size_counter(cmd->args) == 2)

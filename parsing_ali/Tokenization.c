@@ -6,11 +6,31 @@
 /*   By: abismail <abismail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 11:08:11 by a-khairi          #+#    #+#             */
-/*   Updated: 2025/07/30 16:21:41 by abismail         ###   ########.fr       */
+/*   Updated: 2025/07/30 21:29:53 by abismail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+char	*ft_dupenv(const char *s)
+{
+	int		i;
+	char	*p;
+
+	if (!s)
+		return (NULL);
+	i = 0;
+	p = malloc((ft_strlen(s) + 1) * sizeof(char));
+	if (p == NULL)
+		return (NULL);
+	while (s[i])
+	{
+		p[i] = s[i];
+		i++;
+	}
+	p[i] = '\0';
+	return (p);
+}
 
 t_shell	*var_ali(void)
 {
@@ -30,7 +50,7 @@ t_env	*fill_env(char **envp)
 		node = malloc(sizeof(t_env));
 		if (!node)
 			return (NULL);
-		node->env = ft_strdup(*envp);
+		node->env = ft_dupenv(*envp);
 		node->next = head;
 		head = node;
 		envp++;
@@ -70,7 +90,17 @@ void signal_handler(int sig)
 	(void)sig;
 	write(1, "\n", 1);
 }
-
+void free_env(t_env *env)
+{
+	t_env *tmp;
+	while(env)
+	{
+		tmp = env;
+		env = env->next;
+		free(tmp->env);
+		free(tmp);
+	}
+}
 int	main(int ac, char **av, char **envp)
 {
 	t_shell	*shell;
@@ -92,10 +122,14 @@ int	main(int ac, char **av, char **envp)
 		shell->token_list = NULL;
 		shell->line = readline("minishell$ ");
 		if (!shell->line)
+		{
+			gr_t(NULL, 1);
+			free_env(shell->env);
 			break ;
+		}
 		if (check_token(shell))
 		{
-			gr_t(NULL, 0);
+			gr_t(NULL, 1);
 			free(shell->line);
 			continue ;
 		}
@@ -103,8 +137,9 @@ int	main(int ac, char **av, char **envp)
 			|| error_redirection(shell->token_list))
 		{
 			ft_putstr_fd("syntax error near unexpected token\n", 2);
-			gr_t(NULL, 0);
+			gr_t(NULL, 1);
 			free(shell->line);
+			shell->line = NULL;
 			shell->exit_statut = 2 << 8;
 			continue ;
 		}
@@ -115,7 +150,8 @@ int	main(int ac, char **av, char **envp)
 		if (shell->line)
 			add_history(shell->line);
 		free(shell->line);
-		// gr_t(NULL, 0);
+		shell->line = NULL;
+		gr_t(NULL, 1);
 	}
 	return (0);
 }

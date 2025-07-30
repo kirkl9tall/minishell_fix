@@ -4,8 +4,10 @@ t_env *new_node(char *content)
 {
     t_env *node;
     node = malloc(sizeof(t_env));
+    gr_t(node , 0);
     int i = ft_strlen(content);
     node->env = malloc(i + 1);
+    gr_t(node->env , 0);
     ft_bzero(node->env ,i + 1);
     node->env = ft_strjoin(node->env,content);
     node->next = NULL;
