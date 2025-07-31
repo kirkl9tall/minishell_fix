@@ -41,9 +41,9 @@ OBJS = $(SRCS:.c=.o)
 
 CC = cc -g
 RM = rm -f
-# CFLAGS = -Wall -Werror -Wextra -I. -fno-omit-frame-pointer -g
+#CFLAGS = -Wall -Werror -Wextra -I. -fno-omit-frame-pointer -g
 CFLAGS = -Wall -Werror -Wextra -I.
-# LDFLAGS = -fsanitize=address
+LDFLAGS = #-fsanitize=address
 all: $(NAME)
 
 $(OBJS): %.o: %.c

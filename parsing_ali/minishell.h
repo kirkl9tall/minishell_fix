@@ -6,7 +6,7 @@
 /*   By: abismail <abismail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 11:08:25 by a-khairi          #+#    #+#             */
-/*   Updated: 2025/07/30 21:50:39 by abismail         ###   ########.fr       */
+/*   Updated: 2025/07/31 10:25:54 by abismail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,7 +132,7 @@ typedef struct s_token_node
 
 typedef struct s_ex_f
 {
-	int res;
+	long res;
 	int flag;
 }t_ex_f;
 

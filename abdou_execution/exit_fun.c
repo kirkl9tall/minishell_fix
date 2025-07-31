@@ -4,10 +4,11 @@ t_ex_f	ft_atoi_exit(const char *str)
 {
 	int	i;
 	int	sn;
-	long	rest;
 	t_ex_f res;
+
 	sn = 1;
-	rest = 0;
+	res.res = 0;
+    res.flag = 0;
 	i = 0;
 	while ((str[i] >= 9 && str[i] <= 13) || str[i] == ' ')
 		i++;
@@ -19,12 +20,12 @@ t_ex_f	ft_atoi_exit(const char *str)
 	}
 	while (str[i] && str[i] >= '0' && str[i] <= '9')
 	{
-		rest = rest * 10 + (str[i] - '0');
-		if (rest > INT_MAX   || rest < INT_MIN)
+		res.res = res.res * 10 + (str[i] - '0');
+		if (res.res > INT_MAX   || res.res < INT_MIN)
 			res.flag = 1;
         i++;
 	}
-	res.res = rest *sn;
+	res.res = res.res *sn;
 	return (res);
 }
 

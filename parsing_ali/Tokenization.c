@@ -6,7 +6,7 @@
 /*   By: abismail <abismail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 11:08:11 by a-khairi          #+#    #+#             */
-/*   Updated: 2025/07/30 21:29:53 by abismail         ###   ########.fr       */
+/*   Updated: 2025/07/31 10:51:17 by abismail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ char	*ft_dupenv(const char *s)
 		return (NULL);
 	i = 0;
 	p = malloc((ft_strlen(s) + 1) * sizeof(char));
+	// gr_t(p, 0);
 	if (p == NULL)
 		return (NULL);
 	while (s[i])

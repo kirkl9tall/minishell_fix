@@ -54,12 +54,18 @@ void analyser_command (t_shell *shell,t_command *cmd)
         exit(0);
     if (!cmd->args[0][0])
     {
+        free_env(shell->env);
+        gr_t(NULL , 1);
         write(2, "Command not found\n", 18);
-        exit(0);
+        exit(127);
     }
     analyse_check_dups(cmd);
     if (check_func_buil(shell,cmd) == 1)
+    {
+        free_env(shell->env);
+        gr_t(NULL , 1);
         exit(shell->exit_statut >> 8);
+    }
     cmd->conv_env = conv_envs(shell->env);
     non_built_in(shell,cmd);
 }

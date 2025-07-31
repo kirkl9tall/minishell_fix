@@ -112,6 +112,8 @@ void non_built_in(t_shell *shell , t_command *cmd)
     {   
         if (ret != 1)
             perror("minishell");
+        free_env(shell->env);
+        gr_t(NULL , 1);
         exit(126);
     }
     absolut_path(shell,cmd);
