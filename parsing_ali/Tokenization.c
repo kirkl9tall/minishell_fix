@@ -6,7 +6,7 @@
 /*   By: abismail <abismail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 11:08:11 by a-khairi          #+#    #+#             */
-/*   Updated: 2025/07/31 10:51:17 by abismail         ###   ########.fr       */
+/*   Updated: 2025/07/31 12:20:03 by abismail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ char	*ft_dupenv(const char *s)
 		return (NULL);
 	i = 0;
 	p = malloc((ft_strlen(s) + 1) * sizeof(char));
-	// gr_t(p, 0);
 	if (p == NULL)
 		return (NULL);
 	while (s[i])
@@ -88,8 +87,15 @@ int	check_token(t_shell *shell)
 }
 void signal_handler(int sig)
 {
+	t_shell *shell;
+	
 	(void)sig;
 	write(1, "\n", 1);
+	rl_replace_line("", 0);
+	rl_on_new_line();
+	rl_redisplay();
+	shell = var_ali();
+	shell->exit_statut = 130;
 }
 void free_env(t_env *env)
 {

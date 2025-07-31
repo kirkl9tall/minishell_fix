@@ -1083,7 +1083,9 @@ void handle_pipes(t_shell *shell)
         s.pid[s.i]= fork();
         if (!s.pid[s.i])
         {
-            if(shell->cmd->fd_origin > 2)
+            cmd->fd_out = 1;
+            cmd->fd_in = 0;
+            if(shell->cmd->fd_origin > 2) // 3 ++
                 close(shell->cmd->fd_origin);
             if(shell->cmd->fd_origin_in > 2)
                 close(shell->cmd->fd_origin_in);
@@ -1098,6 +1100,8 @@ void handle_pipes(t_shell *shell)
                 close(pipe_fd[1]);
                 close(pipe_fd[0]);
             }
+            cmd->fd_origin = 1;
+            cmd->fd_origin_in = 0;
             // free(s.pid);
             s.pid = NULL;
             analyser_command(shell,cmd);
@@ -1109,8 +1113,8 @@ void handle_pipes(t_shell *shell)
             close(s.p);
         if (s.i < s.nb_cmd - 1)
         {
-        close(pipe_fd[1]);
-        s.p = pipe_fd[0];
+            close(pipe_fd[1]);
+            s.p = pipe_fd[0];
         }
         s.i++;
         cmd = cmd->next;

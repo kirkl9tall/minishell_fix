@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_expansion_1.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: a-khairi <a-khairi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: abismail <abismail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/24 18:22:21 by a-khairi          #+#    #+#             */
-/*   Updated: 2025/07/23 23:35:20 by a-khairi         ###   ########.fr       */
+/*   Updated: 2025/07/31 12:19:47 by abismail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static char	*handle_special_var(t_shell *shell, int *i)
 		if (WIFEXITED(shell->exit_statut))
 			return (ft_strdup(ft_itoa(WEXITSTATUS(shell->exit_statut))));
 		else if (WIFSIGNALED(shell->exit_statut))
-			return (ft_strdup(ft_itoa(WTERMSIG(shell->exit_statut))));
+			return (ft_strdup(ft_itoa(128 + WTERMSIG(shell->exit_statut))));
 	}
 	return (NULL);
 }

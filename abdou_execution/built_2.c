@@ -50,7 +50,7 @@ void analyser_command (t_shell *shell,t_command *cmd)
     cmd->fd_in = 0;
     if (redirecter(shell,cmd) == 1)
         exit(1);
-         if (!cmd->args)
+    if (!cmd->args)
         exit(0);
     if (!cmd->args[0][0])
     {
