@@ -1059,29 +1059,9 @@ void signal_handler_parent()
 // {
 
 // }
-
-void handle_pipes(t_shell *shell)
+void child_pipe(t_shell * shell,t_command * cmd,t_hp s)
 {
-    t_hp s;
-    t_command *cmd;
-
-    cmd = shell->cmd;
-    s.nb_cmd = pipe_nbr(cmd) + 1;
-    s.pid = malloc(s.nb_cmd * sizeof(int));
-    gr_t(s.pid , 0);
-
-    // if (!s.pid)
-    //     exit(2);
-    s.i = 0;
-    s.p = -1;
-    while (s.i < s.nb_cmd && cmd)
-    {
-        if (s.i < s.nb_cmd - 1)
-            pipe(s.pipe_fd);
-        s.pid[s.i]= fork();
-        if (!s.pid[s.i])
-        {
-            cmd->fd_out = 1;
+                cmd->fd_out = 1;
             cmd->fd_in = 0;
             if(shell->cmd->fd_origin > 2)
                 close(shell->cmd->fd_origin);
@@ -1100,14 +1080,43 @@ void handle_pipes(t_shell *shell)
                 close(s.pipe_fd[1]);
                 close(s.pipe_fd[0]);
             }
-            // free(s.pid);
             s.pid = NULL;
             analyser_command(shell,cmd);
             free_env(shell->env);
             gr_t(NULL,1);
             close_fds();
             exit(0);
-        }
+}
+void wait_childs(t_shell *shell, t_hp s)
+{
+    s.i = 0;
+    while (s.i < s.nb_cmd)
+    {
+        waitpid(s.pid[s.i],&shell->exit_statut,0);
+        s.i++;
+    }
+    if (s.p != -1)
+            close(s.p);       
+    s.pid = NULL;
+}
+void handle_pipes(t_shell *shell)
+{
+    t_hp s;
+    t_command *cmd;
+
+    cmd = shell->cmd;
+    s.nb_cmd = pipe_nbr(cmd) + 1;
+    s.pid = malloc(s.nb_cmd * sizeof(int));
+    gr_t(s.pid , 0);
+    s.i = 0;
+    s.p = -1;
+    while (s.i < s.nb_cmd && cmd)
+    {
+        if (s.i < s.nb_cmd - 1)
+            pipe(s.pipe_fd);
+        s.pid[s.i]= fork();
+        if (!s.pid[s.i])
+            child_pipe(shell,cmd,s);
         if (s.p != -1)
             close(s.p);
         if (s.i < s.nb_cmd - 1)
@@ -1118,17 +1127,7 @@ void handle_pipes(t_shell *shell)
         s.i++;
         cmd = cmd->next;
     }
-    
-    s.i = 0;
-    while (s.i < s.nb_cmd)
-    {
-        waitpid(s.pid[s.i],&shell->exit_statut,0);
-        s.i++;
-    }
-    if (s.p != -1)
-            close(s.p);       
-    // free(s.pid);
-    s.pid = NULL;
+    wait_childs(shell,s);
 }
 
 void close_fds()

@@ -71,6 +71,5 @@ void p_doublviha(t_shell *shell,t_command * cmd)
         return ; // p erroooorrr daruri=========== ///
     result = ft_strjoin(buff,"\n");
     ft_putstr_fd(result, cmd->fd_out);
-    // dup2(cmd->fd_origin,1); 
-    // dup2(cmd->fd_origin_in,0); 
+    free (buff);
 }
