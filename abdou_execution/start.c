@@ -1063,8 +1063,6 @@ void signal_handler_parent()
 void handle_pipes(t_shell *shell)
 {
     t_hp s;
-
-    int pipe_fd[2];
     t_command *cmd;
 
     cmd = shell->cmd;
@@ -1079,16 +1077,18 @@ void handle_pipes(t_shell *shell)
     while (s.i < s.nb_cmd && cmd)
     {
         if (s.i < s.nb_cmd - 1)
-            pipe(pipe_fd);
+            pipe(s.pipe_fd);
         s.pid[s.i]= fork();
         if (!s.pid[s.i])
         {
             cmd->fd_out = 1;
             cmd->fd_in = 0;
-            if(shell->cmd->fd_origin > 2) // 3 ++
+            if(shell->cmd->fd_origin > 2)
                 close(shell->cmd->fd_origin);
             if(shell->cmd->fd_origin_in > 2)
                 close(shell->cmd->fd_origin_in);
+            cmd->fd_origin = 1;
+            cmd->fd_origin_in = 0;
             if (s.i > 0)
             {
                 dup2(s.p, 0);
@@ -1096,25 +1096,24 @@ void handle_pipes(t_shell *shell)
             }
             if (s.i < s.nb_cmd - 1)
             {
-                dup2(pipe_fd[1], 1);
-                close(pipe_fd[1]);
-                close(pipe_fd[0]);
+                dup2(s.pipe_fd[1], 1);
+                close(s.pipe_fd[1]);
+                close(s.pipe_fd[0]);
             }
-            cmd->fd_origin = 1;
-            cmd->fd_origin_in = 0;
             // free(s.pid);
             s.pid = NULL;
             analyser_command(shell,cmd);
             free_env(shell->env);
             gr_t(NULL,1);
+            close_fds();
             exit(0);
         }
         if (s.p != -1)
             close(s.p);
         if (s.i < s.nb_cmd - 1)
         {
-            close(pipe_fd[1]);
-            s.p = pipe_fd[0];
+            close(s.pipe_fd[1]);
+            s.p = s.pipe_fd[0];
         }
         s.i++;
         cmd = cmd->next;
@@ -1132,14 +1131,16 @@ void handle_pipes(t_shell *shell)
     s.pid = NULL;
 }
 
-// void init_fds(t_shell * shell)
-// {
-//     shell->cmd->fd_origin = dup(1);
-//     shell->cmd->fd_origin_in = dup(0);
-//     shell->cmd->fd_out = 1;
-//     shell->cmd->fd_in = 0;
-
-// }
+void close_fds()
+{
+    int i;
+    i = 3;
+    while (i <1024)
+    {
+        close(i); 
+        i++;
+    }
+}
 int start(t_shell *shell)
 {
     // t_command *analyzer;
@@ -1166,7 +1167,10 @@ int start(t_shell *shell)
     if (nbr_pipe == 0)
     {
         if (redirecter(shell , shell->cmd) == 1)
+        {
+            close_fds();
             return 0;
+        }
         dup2(shell->cmd->fd_out,1);
         dup2(shell->cmd->fd_in,0);
         if (check_func_buil(shell,shell->cmd) == 1)

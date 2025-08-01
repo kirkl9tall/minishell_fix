@@ -59,6 +59,8 @@ void unsetiha (t_shell *shell,t_command *cmd)
 
 int red_two(t_shell * shell ,t_command *cmd, t_redirect * analyser)
 {
+     if (cmd->fd_in > 0)
+        close(cmd->fd_in);
     cmd->fd_in = open(analyser->filename,O_RDONLY);
     if  (cmd->fd_in == -1)
     {

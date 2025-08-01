@@ -49,13 +49,21 @@ void analyser_command (t_shell *shell,t_command *cmd)
     cmd->fd_out = 1;
     cmd->fd_in = 0;
     if (redirecter(shell,cmd) == 1)
+    {
+        close_fds();
         exit(1);
-    if (!cmd->args)
+    }
+    if (!cmd->args || !cmd->args[0])
+    {
+        gr_t(NULL , 1);
+        close_fds();
         exit(0);
+    }
     if (!cmd->args[0][0])
     {
         free_env(shell->env);
         gr_t(NULL , 1);
+        close_fds();
         write(2, "Command not found\n", 18);
         exit(127);
     }
@@ -63,6 +71,7 @@ void analyser_command (t_shell *shell,t_command *cmd)
     if (check_func_buil(shell,cmd) == 1)
     {
         free_env(shell->env);
+        close_fds();
         gr_t(NULL , 1);
         exit(shell->exit_statut >> 8);
     }

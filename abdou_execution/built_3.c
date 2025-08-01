@@ -7,19 +7,24 @@ void absolut_path(t_shell *shell ,t_command * cmd)
          if (access(cmd->args[0],F_OK) == 0)
         {
             if (access(cmd->args[0],X_OK)== 0)
+            {
+                close_fds();
                 execve(cmd->args[0],&cmd->args[0],cmd->conv_env);
+            }
             else
             {
                 ft_putstr_fd("Permission denied\n",2);
-                exit(126); //exit status 
                 free_env(shell->env);
+                close_fds();
                 gr_t(NULL,1);
+                exit(126); //exit status 
             }
         }
         else
         {
             ft_putstr_fd("No such file or directory\n",2);
             free_env(shell->env);
+            close_fds();
             gr_t(NULL,1);
             exit (127); //// exit status 
         }
@@ -31,6 +36,7 @@ void env_p_null (t_shell *shell, t_command * cmd)
     ft_putstr_fd("command not found: ",2);
     ft_putstr_fd(cmd->args[0],2);
     ft_putstr_fd("\n",2);
+    close_fds();
     free_env(shell->env);
     gr_t(NULL,1);
     exit(127); 
@@ -42,23 +48,29 @@ void exit_relat_permission (t_shell *shell,t_command * cmd, int flag_permission)
     {
         ft_putstr_fd(cmd->args[0],2);
         ft_putstr_fd(": permission denied\n",2);
+        close_fds();
         free_env(shell->env);
         gr_t(NULL,1);
+        exit (126);
     }
     else
     {
         ft_putstr_fd(cmd->args[0],2);
         ft_putstr_fd(": command not found\n",2);
+        close_fds();
         free_env(shell->env);
         gr_t(NULL,1);
+        exit (127);
     }
-    exit (127);
 }
 
 void exec_f_x_ok (t_command *cmd , char * axe)
 {
     if (access(axe,X_OK) == 0)
-    execve(axe,&cmd->args[0],cmd->conv_env);
+    {
+        close_fds();
+        execve(axe,&cmd->args[0],cmd->conv_env);
+    }
 }
 
 void relative_path (t_shell *shell, t_command  *cmd)
@@ -114,6 +126,7 @@ void non_built_in(t_shell *shell , t_command *cmd)
             perror("minishell");
         free_env(shell->env);
         gr_t(NULL , 1);
+        close_fds();
         exit(126);
     }
     absolut_path(shell,cmd);

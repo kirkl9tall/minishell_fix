@@ -89,6 +89,7 @@ void exit_function(t_shell *shell , t_command *cmd)
 {
     int i;
 
+    close_fds();
     i = 0;
     if (size_counter(cmd->args) == 1)
     {
@@ -97,7 +98,10 @@ void exit_function(t_shell *shell , t_command *cmd)
         write (2,"exit\n",5);
         free_env(shell->env);
         gr_t(NULL,1);
-        exit(0);
+        if (WIFEXITED(shell->exit_statut))
+        exit(WEXITSTATUS(shell->exit_statut));
+        else if (WIFSIGNALED(shell->exit_statut))
+            exit (128 + WTERMSIG(shell->exit_statut));
     }
     else if (size_counter(cmd->args) == 2)
     {

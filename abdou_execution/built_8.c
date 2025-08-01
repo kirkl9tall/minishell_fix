@@ -2,6 +2,8 @@
 
 int red_one(t_shell * shell ,t_command *cmd, t_redirect * analyser)
 {
+     if (cmd->fd_out > 1)
+        close(cmd->fd_out);
     cmd->fd_out = open(analyser->filename,O_WRONLY | O_CREAT |O_APPEND,0644);
     if (cmd->fd_out == -1)
     {
@@ -14,6 +16,8 @@ int red_one(t_shell * shell ,t_command *cmd, t_redirect * analyser)
 
 int red_zero(t_shell * shell ,t_command *cmd, t_redirect * analyser)
 {
+    if (cmd->fd_out > 1)
+        close(cmd->fd_out);
     cmd->fd_out = open(analyser->filename,O_WRONLY | O_CREAT | O_TRUNC ,0644);
     if (cmd->fd_out == -1)
     {
