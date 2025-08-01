@@ -6,7 +6,7 @@
 /*   By: abismail <abismail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 11:08:25 by a-khairi          #+#    #+#             */
-/*   Updated: 2025/08/01 11:02:59 by abismail         ###   ########.fr       */
+/*   Updated: 2025/08/01 17:49:47 by abismail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -279,5 +279,4 @@ void signal_handler_child();
 void handle_pipes(t_shell *shell);
 void free_env(t_env *env);
 void close_fds();
-
 #endif

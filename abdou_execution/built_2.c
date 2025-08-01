@@ -70,7 +70,8 @@ void analyser_command (t_shell *shell,t_command *cmd)
     analyse_check_dups(cmd);
     if (check_func_buil(shell,cmd) == 1)
     {
-        free_env(shell->env);
+        // free_env(shell->env);
+        shell->env = NULL;
         close_fds();
         gr_t(NULL , 1);
         exit(shell->exit_statut >> 8);

@@ -1061,7 +1061,7 @@ void signal_handler_parent()
 // }
 void child_pipe(t_shell * shell,t_command * cmd,t_hp s)
 {
-                cmd->fd_out = 1;
+            cmd->fd_out = 1;
             cmd->fd_in = 0;
             if(shell->cmd->fd_origin > 2)
                 close(shell->cmd->fd_origin);
@@ -1099,6 +1099,17 @@ void wait_childs(t_shell *shell, t_hp s)
             close(s.p);       
     s.pid = NULL;
 }
+
+void p_n_pipe(t_hp *s)
+{
+    if (s->p != -1)
+        close(s->p);
+    if (s->i < s->nb_cmd - 1)
+    {
+        close(s->pipe_fd[1]);
+        s->p = s->pipe_fd[0];
+    }   
+}
 void handle_pipes(t_shell *shell)
 {
     t_hp s;
@@ -1117,19 +1128,68 @@ void handle_pipes(t_shell *shell)
         s.pid[s.i]= fork();
         if (!s.pid[s.i])
             child_pipe(shell,cmd,s);
-        if (s.p != -1)
-            close(s.p);
-        if (s.i < s.nb_cmd - 1)
-        {
-            close(s.pipe_fd[1]);
-            s.p = s.pipe_fd[0];
-        }
+        p_n_pipe(&s);
         s.i++;
         cmd = cmd->next;
     }
     wait_childs(shell,s);
 }
 
+// void handle_pipes(t_shell *shell)
+// {
+//     int i;
+//     int p;
+//     int pipe_fd[2];
+//     int *pid;
+//     int nb_cmd;
+//     t_command *cmd;
+
+//     cmd = shell->cmd;
+//     nb_cmd = pipe_nbr(cmd) + 1;
+//     pid = malloc(nb_cmd * sizeof(int));
+//     if (!pid)
+//         exit(2);
+//     i = 0;
+//     p = -1;
+//     while (i < nb_cmd && cmd)
+//     {
+//         if (i < nb_cmd - 1)
+//             pipe(pipe_fd);
+//         pid[i]= fork();
+//         if (!pid[i])
+//         {
+//             if (i > 0)
+//             {
+//                 dup2(p, 0);
+//                 close(p);
+//             }
+//             if (i < nb_cmd - 1)
+//             {
+//                 dup2(pipe_fd[1], 1);
+//                 close(pipe_fd[1]);
+//             }
+//             free(pid);
+//             analyser_command(shell,cmd);
+//             exit(0);
+//         }
+//         if (p != -1)
+//         close(p);
+//         if (i < nb_cmd - 1)
+//         {
+//         close(pipe_fd[1]);
+//         p = pipe_fd[0];
+//         }
+//         i++;
+//         cmd = cmd->next;
+//     }
+//     i = 0;
+//     while (i < nb_cmd)
+//     {
+//         waitpid(pid[i],&shell->exit_statut,0);
+//         i++;
+//     }
+//     free(pid);
+// }
 void close_fds()
 {
     int i;
@@ -1147,8 +1207,8 @@ int start(t_shell *shell)
     // analyzer = shell->cmd;
     init_fds(shell);
     signal(SIGINT,SIG_IGN);
-    // if (check_heredoc(shell))
-    //     return (0);
+    if (check_heredoc(shell))
+        return (0);
     // int f = check_cmd(shell->cmd);
     // if (!f)
     // {
