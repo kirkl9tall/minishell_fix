@@ -7,8 +7,10 @@ int env_similar(t_env *trav1,char * name,char * replace)
         {
             if (ft_find_env(trav1,name))
             {
-                ft_bzero(trav1->env,ft_strlen(trav1->env));
-                trav1->env = ft_strjoin(trav1->env,replace);
+                free(trav1->env);
+                // ft_bzero(trav1->env,ft_strlen(trav1->env));
+                // trav1->env = ft_envjoin(trav1->env,replace);
+                trav1->env = ft_envdup(replace);
                 return 1 ; 
             }
             trav1 = trav1->next;

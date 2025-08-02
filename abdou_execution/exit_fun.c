@@ -67,7 +67,7 @@ void exit_number(t_shell *shell,t_command *cmd)
     shell->exit_statut = s.res;
     if (s.flag == 1)
     {
-        ft_putstr_fd("too many arguments\n",2);
+        ft_putstr_fd("numeric argument required\n",2);
         close(shell->cmd->fd_origin);
         close(shell->cmd->fd_origin_in);
         free_env(shell->env);

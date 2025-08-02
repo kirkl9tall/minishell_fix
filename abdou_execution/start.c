@@ -1033,59 +1033,30 @@ void signal_handler_parent()
 {
     // write(1,"\n",2);
 }
-// int check_cmd(t_command *cmd)
-// {
-//     t_command * trav;
-//     int i = 0;
-//     trav = cmd;
-//     while (trav)
-//     {
-//         if (trav->args)
-//             i++;
-//         trav = trav->next;
-//     }
-//     if (cmd->redirects)
-//     {
-//         while (cmd->redirects)
-//         {
-//             if (cmd->redirects->type != 3)
-//                 i++;
-//             cmd->redirects = cmd->redirects->next;
-//         }
-//     }
-//     return i ;
-// }
-// void dup_child_pipe(t_shell * shell)
-// {
 
-// }
 void child_pipe(t_shell * shell,t_command * cmd,t_hp s)
 {
-            cmd->fd_out = 1;
-            cmd->fd_in = 0;
-            if(shell->cmd->fd_origin > 2)
-                close(shell->cmd->fd_origin);
-            if(shell->cmd->fd_origin_in > 2)
-                close(shell->cmd->fd_origin_in);
-            cmd->fd_origin = 1;
-            cmd->fd_origin_in = 0;
-            if (s.i > 0)
-            {
-                dup2(s.p, 0);
-                close(s.p);
-            }
-            if (s.i < s.nb_cmd - 1)
-            {
-                dup2(s.pipe_fd[1], 1);
-                close(s.pipe_fd[1]);
-                close(s.pipe_fd[0]);
-            }
-            s.pid = NULL;
-            analyser_command(shell,cmd);
-            free_env(shell->env);
-            gr_t(NULL,1);
-            close_fds();
-            exit(0);
+    cmd->fd_out = 1;
+    cmd->fd_in = 0;
+    if(shell->cmd->fd_origin > 2)
+        close(shell->cmd->fd_origin);
+    if(shell->cmd->fd_origin_in > 2)
+        close(shell->cmd->fd_origin_in);
+    cmd->fd_origin = 1;
+    cmd->fd_origin_in = 0;
+    if (s.i > 0)
+    {
+        dup2(s.p, 0);
+        close(s.p);
+    }
+    if (s.i < s.nb_cmd - 1)
+    {
+        dup2(s.pipe_fd[1], 1);
+        close(s.pipe_fd[1]);
+        close(s.pipe_fd[0]);
+    }
+    s.pid = NULL;
+    analyser_command(shell,cmd);
 }
 void wait_childs(t_shell *shell, t_hp s)
 {
@@ -1134,62 +1105,6 @@ void handle_pipes(t_shell *shell)
     }
     wait_childs(shell,s);
 }
-
-// void handle_pipes(t_shell *shell)
-// {
-//     int i;
-//     int p;
-//     int pipe_fd[2];
-//     int *pid;
-//     int nb_cmd;
-//     t_command *cmd;
-
-//     cmd = shell->cmd;
-//     nb_cmd = pipe_nbr(cmd) + 1;
-//     pid = malloc(nb_cmd * sizeof(int));
-//     if (!pid)
-//         exit(2);
-//     i = 0;
-//     p = -1;
-//     while (i < nb_cmd && cmd)
-//     {
-//         if (i < nb_cmd - 1)
-//             pipe(pipe_fd);
-//         pid[i]= fork();
-//         if (!pid[i])
-//         {
-//             if (i > 0)
-//             {
-//                 dup2(p, 0);
-//                 close(p);
-//             }
-//             if (i < nb_cmd - 1)
-//             {
-//                 dup2(pipe_fd[1], 1);
-//                 close(pipe_fd[1]);
-//             }
-//             free(pid);
-//             analyser_command(shell,cmd);
-//             exit(0);
-//         }
-//         if (p != -1)
-//         close(p);
-//         if (i < nb_cmd - 1)
-//         {
-//         close(pipe_fd[1]);
-//         p = pipe_fd[0];
-//         }
-//         i++;
-//         cmd = cmd->next;
-//     }
-//     i = 0;
-//     while (i < nb_cmd)
-//     {
-//         waitpid(pid[i],&shell->exit_statut,0);
-//         i++;
-//     }
-//     free(pid);
-// }
 void close_fds()
 {
     int i;

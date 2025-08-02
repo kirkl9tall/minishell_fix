@@ -41,13 +41,8 @@ int check_cmd(t_command *cmd)
     }
     return i ;
 }
-
-void analyser_command (t_shell *shell,t_command *cmd)
+void check_analyser_troubles(t_shell *shell,t_command *cmd)
 {
-    signal(SIGINT, shell->defau_sigc);
-    signal(SIGQUIT, shell->defau_sigq);
-    cmd->fd_out = 1;
-    cmd->fd_in = 0;
     if (redirecter(shell,cmd) == 1)
     {
         close_fds();
@@ -66,12 +61,20 @@ void analyser_command (t_shell *shell,t_command *cmd)
         close_fds();
         write(2, "Command not found\n", 18);
         exit(127);
-    }
+    }   
+}
+void analyser_command (t_shell *shell,t_command *cmd)
+{
+    signal(SIGINT, shell->defau_sigc);
+    signal(SIGQUIT, shell->defau_sigq);
+    cmd->fd_out = 1;
+    cmd->fd_in = 0;
+    check_analyser_troubles(shell,cmd);
     analyse_check_dups(cmd);
     if (check_func_buil(shell,cmd) == 1)
     {
-        // free_env(shell->env);
-        shell->env = NULL;
+        free_env(shell->env);
+        // shell->env = NULL;
         close_fds();
         gr_t(NULL , 1);
         exit(shell->exit_statut >> 8);

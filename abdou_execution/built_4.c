@@ -47,7 +47,8 @@ void unsetiha (t_shell *shell,t_command *cmd)
             {
                 trash = env->next;
                 env->next = trash->next;
-                // free (trash);
+                free(trash->env);
+                free (trash);
                 trash = NULL;
                 break;    
             }

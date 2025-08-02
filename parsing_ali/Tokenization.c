@@ -6,7 +6,7 @@
 /*   By: abismail <abismail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 11:08:11 by a-khairi          #+#    #+#             */
-/*   Updated: 2025/08/01 18:26:24 by abismail         ###   ########.fr       */
+/*   Updated: 2025/08/01 21:26:05 by abismail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,7 +158,7 @@ int	main(int ac, char **av, char **envp)
 			add_history(shell->line);
 		free(shell->line);
 		shell->line = NULL;
-		// gr_t(NULL, 1);
 	}
+	// gr_t(NULL, 1);
 	return (0);
 }

@@ -60,7 +60,7 @@ void maj_pwd(t_shell *shell)
          pwd = getcwd(NULL,0);
         gr_t(pwd , 1);
         // search->env = NULL;
-        //  free(search->env);
+         free(search->env);
          search->env = ft_envjoin("PWD=", pwd);
      }
      search = search->next;
@@ -75,10 +75,10 @@ int  maj_env (t_shell *shell, char *old_pwd)
    {
     if (ft_find_env(search,"OLDPWD"))
     {
-        // free(search->env);
+        free(search->env);
         if (!old_pwd)
         {
-            search->env = ft_strdup("OLDPWD");
+            search->env = ft_envdup("OLDPWD");
             return (0);
         }
         search->env = ft_envjoin("OLDPWD=", old_pwd);
