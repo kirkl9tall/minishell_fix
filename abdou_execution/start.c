@@ -1,7 +1,5 @@
 #include "parsing_ali/minishell.h"
 
-char    *ft_find_env(t_env *env, const char *envi);
-
 int pipe_nbr(t_command *cmd)
 {
     int i  = 0;
@@ -12,31 +10,6 @@ int pipe_nbr(t_command *cmd)
     }
     return (i - 1);
 }
-int  dupper(t_command *cmd)
-{
-    if (cmd->fd_out == -1)
-        return(0);/// exit status
-    else
-    {
-        cmd->fd_origin = dup(1);
-        dup2(cmd->fd_out,1);
-    }
-    return 1;
-}
-
-void free_all(t_shell *shell)
-{
-    (void)shell;
-    // printf("this is the fucntion to free %s\n", shell->line);
-}
-
-
-// void signal_handler_child()
-// {
-    
-//     exit(1);// must make exit status of ctrl +c 
-// }
-
 
 void child_pipe(t_shell * shell,t_command * cmd,t_hp s)
 {
