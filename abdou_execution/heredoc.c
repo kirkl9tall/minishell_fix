@@ -8,7 +8,53 @@ void signal_handler_here_doc(int sig)
     exit(130);
 }
 
-void child_heredoc_exec(t_command *analyser,t_redirect *tmp)
+static int	pars_h_1(int *i, char *delim, char **token)
+{
+	int		start;
+	int		len;
+	char	*part;
+
+	start = *i;
+	while (delim[*i] && delim[*i] != '$')
+		(*i)++;
+	len = *i - start;
+	if (len <= 0)
+		return (0);
+	part = ft_substr(delim, start, len);
+	if (!part)
+		return (1);
+	if (append_part(token, part))
+		return (1);
+	return (0);
+}
+
+char	*expand_herdoc(char *delim,t_shell *shell)
+{
+	int		i;
+	char	*token;
+    char      *expand;
+	i = 0;
+	token = NULL;
+	if (!delim)
+		return (NULL);
+	while (delim[i])
+	{
+        if (delim[i] == '$')
+        {
+
+            expand = extract_var_part(shell,&i);
+	        if (append_part(&token, expand))
+		        return (NULL);
+        }
+		else
+		{
+			if (pars_h_1(&i, delim, &token))
+				return (NULL);
+		}
+	}
+	return (token);
+}
+void child_heredoc_exec(t_shell *shell, t_command *analyser,t_redirect *tmp)
 {
     char *line;
 
@@ -21,10 +67,13 @@ void child_heredoc_exec(t_command *analyser,t_redirect *tmp)
             break;
         if (ft_strcmp(line, tmp->delimiter) == 0)
             break;
-        write(analyser->fd_here, line, ft_strlen(line));
+        shell->line = line;
+        write(analyser->fd_here, expand_herdoc(line,shell), ft_strlen(expand_herdoc(line,shell)));
         write(analyser->fd_here, "\n", 1);
         free(line);
     }
+    free_env(shell->env);
+    gr_t(NULL,1);
     close_fds();
     exit(0);
 }
@@ -38,7 +87,7 @@ int type_three_heredoc(t_shell *shell , t_command *analyser,t_redirect *tmp)
     unlink(shell->rend.rnd_3);
     int pid = fork();
     if (!pid)
-        child_heredoc_exec(analyser,tmp);
+        child_heredoc_exec(shell,analyser,tmp);
      if (analyser->fd_here > 0)
         close(analyser->fd_here);
     waitpid(pid, &shell->exit_statut, 0);
