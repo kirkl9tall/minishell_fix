@@ -39,13 +39,18 @@ void absolut_path(t_shell *shell ,t_command * cmd)
 
 void env_p_null (t_shell *shell, t_command * cmd)
 {
-    ft_putstr_fd("command not found: ",2);
-    ft_putstr_fd(cmd->args[0],2);
-    ft_putstr_fd("\n",2);
-    close_fds();
-    free_env(shell->env);
-    gr_t(NULL,1);
-    exit(127); 
+    if (access(cmd->args[0],F_OK) == 0)
+        {
+            if (access(cmd->args[0],X_OK)== 0)
+            {
+                close_fds();
+                execve(cmd->args[0],&cmd->args[0],cmd->conv_env);
+            }
+            else
+                permission_denied_path(shell);
+        }
+        else
+            no_such_file(shell);
 }
 
 void exit_relat_permission (t_shell *shell,t_command * cmd, int flag_permission)
