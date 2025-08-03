@@ -21,7 +21,6 @@ SRCS = parsing_ali/check_ambiguous.c \
 	   parsing_ali/garbage_collecter.c \
 	   parsing_ali/pars_herdoc.c \
 		abdou_execution/start.c \
-		abdou_execution/piper.c \
 		abdou_execution/heredoc.c \
 		abdou_execution/built_1.c \
 		abdou_execution/built_2.c \
@@ -36,14 +35,13 @@ SRCS = parsing_ali/check_ambiguous.c \
 		abdou_execution/export.c \
 		abdou_execution/export_2.c \
 
-
 OBJS = $(SRCS:.c=.o)
 
 CC = cc -g
 RM = rm -f
-CFLAGS = -Wall -Werror -Wextra -I. -fno-omit-frame-pointer -g
-# CFLAGS = -Wall -Werror -Wextra -I.
-LDFLAGS = -fsanitize=address
+# CFLAGS = -Wall -Werror -Wextra -I. -fno-omit-frame-pointer -g
+CFLAGS = -Wall -Werror -Wextra -I.
+# LDFLAGS = -fsanitize=address
 all: $(NAME)
 
 $(OBJS): %.o: %.c

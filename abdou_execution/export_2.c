@@ -8,8 +8,6 @@ int env_similar(t_env *trav1,char * name,char * replace)
             if (ft_find_env(trav1,name))
             {
                 free(trav1->env);
-                // ft_bzero(trav1->env,ft_strlen(trav1->env));
-                // trav1->env = ft_envjoin(trav1->env,replace);
                 trav1->env = ft_envdup(replace);
                 return 1 ; 
             }
@@ -17,7 +15,7 @@ int env_similar(t_env *trav1,char * name,char * replace)
         }
         return 0;
 }
-int is_env_valid (char * args)
+int is_env_valid(char * args)
 {
     int i = 0;
     while (args[i])
@@ -32,7 +30,7 @@ int is_env_valid (char * args)
     return (1);
 }
 
-int  is_it_alpha_valid (t_shell *shell,t_command *cmd, int i)
+int  is_it_alpha_valid(t_shell *shell,t_command *cmd, int i)
 {
     if (!(ft_isalpha(cmd->args[i][0])) && cmd->args[i][0] != '_')
     {
@@ -63,7 +61,7 @@ int contain_equal(char * args)
     return (flag);
 }
 
-int     is_exist(t_env *env, const char *envi)
+int is_exist(t_env *env, const char *envi)
 {
     int        len;
 

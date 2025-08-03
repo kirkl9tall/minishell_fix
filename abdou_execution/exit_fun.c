@@ -29,7 +29,7 @@ t_ex_f	ft_atoi_exit(const char *str)
 	return (res);
 }
 
-void exit_numeric_required (t_command *cmd,t_shell *shell)
+void exit_numeric_required(t_command *cmd,t_shell *shell)
 {
     ft_putstr_fd("exit\n",2);
     ft_putstr_fd(cmd->args[0],2);
@@ -42,6 +42,7 @@ void exit_numeric_required (t_command *cmd,t_shell *shell)
     gr_t(NULL,1);
     exit(2);
 }
+
 void check_sign(t_shell *shell,t_command *cmd)
 {
     int i;
@@ -58,6 +59,7 @@ void check_sign(t_shell *shell,t_command *cmd)
       exit_numeric_required(cmd,shell);
     return;  
 }
+
 void exit_number(t_shell *shell,t_command *cmd)
 {
     t_ex_f s;
@@ -103,7 +105,7 @@ void exit_arg_three(t_shell *shell , t_command *cmd)
     shell->exit_statut = 1 << 8;
 }
 
-void exit_one_arg (t_shell *shell)
+void exit_one_arg(t_shell *shell)
 {
     write (2,"exit\n",5);
     free_env(shell->env);
@@ -113,6 +115,7 @@ void exit_one_arg (t_shell *shell)
     else if (WIFSIGNALED(shell->exit_statut))
         exit (128 + WTERMSIG(shell->exit_statut));
 }
+
 void exit_function(t_shell *shell , t_command *cmd)
 {
     int i;

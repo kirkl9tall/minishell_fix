@@ -37,7 +37,7 @@ void absolut_path(t_shell *shell ,t_command * cmd)
     }
 }
 
-void env_p_null (t_shell *shell, t_command * cmd)
+void env_p_null(t_shell *shell, t_command * cmd)
 {
     if (access(cmd->args[0],F_OK) == 0)
         {
@@ -53,7 +53,7 @@ void env_p_null (t_shell *shell, t_command * cmd)
             no_such_file(shell);
 }
 
-void exit_relat_permission (t_shell *shell,t_command * cmd, int flag_permission)
+void exit_relat_permission(t_shell *shell,t_command * cmd, int flag_permission)
 {
     if (flag_permission == 1)
     {
@@ -75,7 +75,7 @@ void exit_relat_permission (t_shell *shell,t_command * cmd, int flag_permission)
     }
 }
 
-void exec_f_x_ok (t_command *cmd , char * axe)
+void exec_f_x_ok(t_command *cmd , char * axe)
 {
     if (access(axe,X_OK) == 0)
     {
@@ -84,7 +84,7 @@ void exec_f_x_ok (t_command *cmd , char * axe)
     }
 }
 
-void relative_path (t_shell *shell, t_command  *cmd)
+void relative_path(t_shell *shell, t_command  *cmd)
 {
     t_relat s;
 

@@ -1,6 +1,5 @@
 #include "parsing_ali/minishell.h"
 
-
 void del_env(t_shell **cmd)
 {
     t_shell *plo;
@@ -8,7 +7,6 @@ void del_env(t_shell **cmd)
     plo = *cmd;
     trash = plo->env->next;
     plo->env->next = plo->env->next->next;
-    // free(trash);
     trash = NULL;
 }
 
@@ -66,7 +64,7 @@ void check_analyser_troubles(t_shell *shell,t_command *cmd)
         exit(127);
     }   
 }
-void analyser_command (t_shell *shell,t_command *cmd)
+void analyser_command(t_shell *shell,t_command *cmd)
 {
     signal(SIGINT, shell->defau_sigc);
     signal(SIGQUIT, shell->defau_sigq);

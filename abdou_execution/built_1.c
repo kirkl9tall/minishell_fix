@@ -8,7 +8,7 @@ void dup_close(t_command *cmd)
     close(cmd->fd_origin_in);
 }
 
-int check_func_buil (t_shell *shell,t_command *cmd)
+int check_func_buil(t_shell *shell,t_command *cmd)
 {
     if (shell->cmd->args == NULL)
         return -1;

@@ -21,6 +21,7 @@ char	*ft_envjoin(char *s1, char *s2)
 	p[i] = '\0';
 	return (p);
 }
+
 char **conv_envs(t_env *env)
 {
     char **envs;
@@ -59,14 +60,13 @@ void maj_pwd(t_shell *shell)
      {
          pwd = getcwd(NULL,0);
         gr_t(pwd , 1);
-        // search->env = NULL;
          free(search->env);
          search->env = ft_envjoin("PWD=", pwd);
      }
      search = search->next;
     }
 }
-int  maj_env (t_shell *shell, char *old_pwd)
+int  maj_env(t_shell *shell, char *old_pwd)
 {
    t_env  *search;
 
@@ -90,7 +90,7 @@ int  maj_env (t_shell *shell, char *old_pwd)
    return (0);
 }
 
-void    e_en_vi_ha (t_shell *shell,t_command *cmd)
+void    e_en_vi_ha(t_shell *shell,t_command *cmd)
 {
     t_env *env;
     env  = shell->env;
@@ -105,7 +105,7 @@ void    e_en_vi_ha (t_shell *shell,t_command *cmd)
     }
 }
 
-int size_counter (char ** args)
+int size_counter(char ** args)
 {
     int i = 0;
     while (args[i])

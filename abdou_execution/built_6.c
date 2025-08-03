@@ -48,7 +48,7 @@ void chdiriha(t_shell * shell,t_command *cmd)
     return;
 }
 
-void echo_no_flag (t_command *cmd, int j, int fd)
+void echo_no_flag(t_command *cmd, int j, int fd)
 {
     while (cmd->args[j])
     {
@@ -75,7 +75,7 @@ void  echo_flag(t_command *cmd, int i, int fd)
     }
 }
 
-int flag_mini (char *args)
+int flag_mini(char *args)
 {
     int  i;
     i = 1;

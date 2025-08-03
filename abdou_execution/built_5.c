@@ -1,6 +1,6 @@
 #include "parsing_ali/minishell.h"
 
-void  printer_echo (t_command * cmd,int flag_exist, int j)
+void  printer_echo(t_command * cmd,int flag_exist, int j)
 {
     if (!cmd->args[j])
         return;
@@ -11,7 +11,7 @@ void  printer_echo (t_command * cmd,int flag_exist, int j)
 }
 
 
-t_echo_f   flag_echo_mac (char *args,t_echo_f f)
+t_echo_f   flag_echo_mac(char *args,t_echo_f f)
 {
     if (args[0] == '-' && args[1]== 'n')
     {
@@ -68,7 +68,7 @@ void p_doublviha(t_shell *shell,t_command * cmd)
     (void)shell;
     buff = getcwd(NULL,0);
     if (!buff)
-        return ; // p erroooorrr daruri=========== ///
+        return ;
     result = ft_strjoin(buff,"\n");
     ft_putstr_fd(result, cmd->fd_out);
     free (buff);

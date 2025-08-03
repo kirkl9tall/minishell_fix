@@ -12,6 +12,7 @@ void none_equal_case_export(t_shell * shell , t_command * cmd,int i,t_env * trav
     if (!is_exist(trav, cmd->args[i]))
         add_exp(&trav,cmd->args[i]);
 }
+
 void export_case_equal(t_shell * shell , t_command * cmd,int i,t_env * trav)
 {
 
@@ -33,9 +34,9 @@ void export_case_equal(t_shell * shell , t_command * cmd,int i,t_env * trav)
         add_exp(&trav,cmd->args[i]);
 
 }
-void exporting (t_shell *shell,t_command *cmd)
+
+void exporting(t_shell *shell,t_command *cmd)
 {
-    // char **name;
     t_env *trav;
     int i;
     i = 1;

@@ -28,7 +28,7 @@ int red_zero(t_shell * shell ,t_command *cmd, t_redirect * analyser)
     return (0);
 }
 
-int redirection_mode (t_shell * shell ,t_command *cmd, t_redirect * analyser)
+int redirection_mode(t_shell * shell ,t_command *cmd, t_redirect * analyser)
 {
     if (analyser->flag == 1)
     {
@@ -52,9 +52,7 @@ int redirection_mode (t_shell * shell ,t_command *cmd, t_redirect * analyser)
             return (1);
     }
     else if (analyser->type == 3) 
-    {
         cmd->fd_in = dup(cmd->fd1_here);
-    }
     return (0);
 }
 
@@ -74,7 +72,7 @@ int redirecter (t_shell *shell , t_command *cmd)
     return  0;
 }
 
-int  scan_len_env (t_env *scaner)
+int  scan_len_env(t_env *scaner)
 {
     int i;
     i = 0;

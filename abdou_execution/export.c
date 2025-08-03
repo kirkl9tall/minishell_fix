@@ -9,7 +9,6 @@ char	*ft_envdup(const char *s)
 		return (NULL);
 	i = 0;
 	p = malloc((ft_strlen(s) + 1) * sizeof(char));
-	// gr_t(p, 0);
 	if (p == NULL)
 		return (NULL);
 	while (s[i])
@@ -25,19 +24,16 @@ t_env *new_node(char *content)
 {
     t_env *node;
     node = malloc(sizeof(t_env));
-    // gr_t(node , 0);
+    // protect ? 
     int i = ft_strlen(content);
     node->env = malloc(i + 1);
     gr_t(node->env , 0);
-    // ft_bzero(node->env ,i + 1);
-    // node->env = ft_envjoin(node->env,content);
      node->env = ft_envdup(content);
-    //  printf("%s\n", node->env);
     node->next = NULL;
     return  (node);
 }
 
-void add_exp (t_env **env,char * content)
+void add_exp(t_env **env,char * content)
 {
     t_env *last;
     t_env *node;
