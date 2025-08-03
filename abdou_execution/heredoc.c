@@ -2,9 +2,14 @@
 
 void signal_handler_here_doc(int sig)
 {
+    t_shell *shell;
+
     (void)sig;
+    shell = var_ali();
+    close_fds();
+    free_env(shell->env);
     write(1, "\n", 1);
-    free_all(var_ali());
+    gr_t(NULL,1);
     exit(130);
 }
 
@@ -61,7 +66,6 @@ void child_heredoc_exec(t_shell *shell, t_command *analyser,t_redirect *tmp)
     signal(SIGINT, signal_handler_here_doc);
     while (1)
     {
-        signal(SIGQUIT, SIG_DFL);
         line = readline("herdoc > ");
         if (!line)
             break;
