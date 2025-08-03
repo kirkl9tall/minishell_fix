@@ -1066,6 +1066,15 @@ void wait_childs(t_shell *shell, t_hp s)
         waitpid(s.pid[s.i],&shell->exit_statut,0);
         s.i++;
     }
+    if (WIFSIGNALED(shell->exit_statut))
+    {
+        if (WTERMSIG(shell->exit_statut) == 2 || WTERMSIG(shell->exit_statut) == 3)
+        {
+            if (WTERMSIG(shell->exit_statut) == 3)
+                write (1, "Quit", 4);
+            write(1, "\n", 1);
+        }
+    }
     if (s.p != -1)
             close(s.p);       
     s.pid = NULL;
