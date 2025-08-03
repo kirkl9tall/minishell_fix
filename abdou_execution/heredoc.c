@@ -1,19 +1,7 @@
 #include "parsing_ali/minishell.h"
 
-void signal_handler_here_doc(int sig)
-{
-    t_shell *shell;
 
-    (void)sig;
-    shell = var_ali();
-    close_fds();
-    free_env(shell->env);
-    write(1, "\n", 1);
-    gr_t(NULL,1);
-    exit(130);
-}
-
-static int	pars_h_1(int *i, char *delim, char **token)
+int	pars_h_1(int *i, char *delim, char **token)
 {
 	int		start;
 	int		len;
@@ -68,7 +56,10 @@ void child_heredoc_exec(t_shell *shell, t_command *analyser,t_redirect *tmp)
     {
         line = readline("herdoc > ");
         if (!line)
+        {
+            write (2,"Warning : delimited by EOF\n",27);
             break;
+        }
         if (ft_strcmp(line, tmp->delimiter) == 0)
             break;
         shell->line = line;

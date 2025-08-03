@@ -1,15 +1,5 @@
 #include "parsing_ali/minishell.h"
 
-void del_env(t_shell **cmd)
-{
-    t_shell *plo;
-    t_env  *trash;
-    plo = *cmd;
-    trash = plo->env->next;
-    plo->env->next = plo->env->next->next;
-    trash = NULL;
-}
-
 void init_fds(t_shell * shell)
 {
     shell->cmd->fd_origin = dup(1);

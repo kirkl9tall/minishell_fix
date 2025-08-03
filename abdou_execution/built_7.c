@@ -1,26 +1,6 @@
 #include "parsing_ali/minishell.h"
 
-char	*ft_envjoin(char *s1, char *s2)
-{
-	char	*p;
-	size_t	i;
 
-	if (!s1 || !s2)
-		return (NULL);
-	p = malloc((ft_strlen(s1) + ft_strlen(s2) + 1) * sizeof(char));
-	if (!p)
-		return (NULL);
-	i = 0;
-	if (ft_strlen(s1))
-	{
-		while (*s1)
-			p[i++] = *s1++;
-	}
-	while (*s2)
-		p[i++] = *s2++;
-	p[i] = '\0';
-	return (p);
-}
 
 char **conv_envs(t_env *env)
 {

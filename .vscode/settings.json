@@ -5,6 +5,7 @@
         "sstream": "c",
         "chrono": "c",
         "text_encoding": "c",
-        "typeinfo": "c"
+        "typeinfo": "c",
+        "stdio.h": "c"
     }
 }

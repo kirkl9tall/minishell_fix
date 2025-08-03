@@ -1,25 +1,5 @@
 #include "parsing_ali/minishell.h"
 
-char	*ft_envdup(const char *s)
-{
-	int		i;
-	char	*p;
-
-	if (!s)
-		return (NULL);
-	i = 0;
-	p = malloc((ft_strlen(s) + 1) * sizeof(char));
-	if (p == NULL)
-		return (NULL);
-	while (s[i])
-	{
-		p[i] = s[i];
-		i++;
-	}
-	p[i] = '\0';
-	return (p);
-}
-
 t_env *new_node(char *content)
 {
     t_env *node;

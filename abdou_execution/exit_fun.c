@@ -1,48 +1,5 @@
 #include "parsing_ali/minishell.h"
 
-t_ex_f	ft_atoi_exit(const char *str)
-{
-	int	i;
-	int	sn;
-	t_ex_f res;
-
-	sn = 1;
-	res.res = 0;
-    res.flag = 0;
-	i = 0;
-	while ((str[i] >= 9 && str[i] <= 13) || str[i] == ' ')
-		i++;
-	if (str[i] == '+' || str[i] == '-')
-	{
-		if (str[i] == '-')
-			sn = -1;
-		i++;
-	}
-	while (str[i] && str[i] >= '0' && str[i] <= '9')
-	{
-		res.res = res.res * 10 + (str[i] - '0');
-		if (res.res > INT_MAX   || res.res < INT_MIN)
-			res.flag = 1;
-        i++;
-	}
-	res.res = res.res *sn;
-	return (res);
-}
-
-void exit_numeric_required(t_command *cmd,t_shell *shell)
-{
-    ft_putstr_fd("exit\n",2);
-    ft_putstr_fd(cmd->args[0],2);
-    ft_putstr_fd(" : ",2);
-    ft_putstr_fd(cmd->args[1],2);
-    ft_putstr_fd(" : numeric argument required\n",2);
-    close(shell->cmd->fd_origin);
-    close(shell->cmd->fd_origin_in);
-    free_env(shell->env);
-    gr_t(NULL,1);
-    exit(2);
-}
-
 void check_sign(t_shell *shell,t_command *cmd)
 {
     int i;

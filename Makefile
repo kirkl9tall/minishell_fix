@@ -21,6 +21,7 @@ SRCS = parsing_ali/check_ambiguous.c \
 	   parsing_ali/garbage_collecter.c \
 	   parsing_ali/pars_herdoc.c \
 		abdou_execution/start.c \
+		abdou_execution/start_2.c \
 		abdou_execution/heredoc.c \
 		abdou_execution/built_1.c \
 		abdou_execution/built_2.c \
@@ -30,6 +31,8 @@ SRCS = parsing_ali/check_ambiguous.c \
 		abdou_execution/built_6.c \
 		abdou_execution/built_7.c \
 		abdou_execution/built_8.c \
+		abdou_execution/built_9.c \
+		abdou_execution/built_10.c \
 		abdou_execution/exit_fun.c \
 		abdou_execution/export_0.c \
 		abdou_execution/export.c \

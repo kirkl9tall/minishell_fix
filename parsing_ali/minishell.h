@@ -6,7 +6,7 @@
 /*   By: abismail <abismail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 11:08:25 by a-khairi          #+#    #+#             */
-/*   Updated: 2025/08/03 17:58:25 by abismail         ###   ########.fr       */
+/*   Updated: 2025/08/03 18:43:48 by abismail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -281,4 +281,25 @@ void free_env(t_env *env);
 void close_fds();
 char	*ft_envjoin(char *s1, char *s2);
 char	*ft_envdup(const char *s);
+void signal_handler_here_doc(int sig);
+int	pars_h_1(int *i, char *delim, char **token);
+char	*expand_herdoc(char *delim,t_shell *shell);
+void child_heredoc_exec(t_shell *shell, t_command *analyser,t_redirect *tmp);
+int type_three_heredoc(t_shell *shell , t_command *analyser,t_redirect *tmp);
+void none_equal_case_export(t_shell * shell , t_command * cmd,int i,t_env * trav);
+void export_case_equal(t_shell * shell , t_command * cmd,int i,t_env * trav);
+void exit_function(t_shell *shell , t_command *cmd);
+void exit_one_arg(t_shell *shell);
+void exit_number(t_shell *shell,t_command *cmd);
+void check_sign(t_shell *shell,t_command *cmd);
+void permission_denied_path(t_shell * shell);
+void no_such_file(t_shell * shell);
+void check_analyser_troubles(t_shell *shell,t_command *cmd);
+void child_pipe(t_shell * shell,t_command * cmd,t_hp s);
+void wait_childs(t_shell *shell, t_hp s);
+
+
+
+
+
 #endif
