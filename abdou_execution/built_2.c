@@ -22,6 +22,9 @@ void init_fds(t_shell * shell)
 int check_cmd(t_command *cmd)
 {
     t_command * trav;
+    t_redirect *redirects;
+    
+    redirects = cmd->redirects;
     int i = 0;
     trav = cmd;
     while (trav)
@@ -30,13 +33,13 @@ int check_cmd(t_command *cmd)
             i++;
         trav = trav->next;
     }
-    if (cmd->redirects)
+    if (redirects)
     {
-        while (cmd->redirects)
+        while (redirects)
         {
-            if (cmd->redirects->type != 3)
+            if (redirects->type != 3)
                 i++;
-            cmd->redirects = cmd->redirects->next;
+            redirects = redirects->next;
         }
     }
     return i ;

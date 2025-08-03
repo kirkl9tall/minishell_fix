@@ -1133,23 +1133,23 @@ int start(t_shell *shell)
     signal(SIGINT,SIG_IGN);
     if (check_heredoc(shell))
         return (0);
-    // int f = check_cmd(shell->cmd);
-    // if (!f)
-    // {
-    //     while (shell->cmd)
-    //     {
-    //         if(shell->cmd->fd_here != -1)
-    //             close (shell->cmd->fd1_here);
-    //         if(shell->cmd->fd1_here != -1)
-    //             close (shell->cmd->fd1_here);
-    //         shell->cmd = shell->cmd->next;
-    //     }
-    //     return 0;
-    // }
+    int f = check_cmd(shell->cmd);
+    if (!f)
+    {
+        while (shell->cmd)
+        {
+            if(shell->cmd->fd_here != -1)
+                close (shell->cmd->fd1_here);
+            if(shell->cmd->fd1_here != -1)
+                close (shell->cmd->fd1_here);
+            shell->cmd = shell->cmd->next;
+        }
+        return 0;
+    }
     nbr_pipe = pipe_nbr(shell->cmd);
     if (nbr_pipe == 0)
     {
-        if (redirecter(shell , shell->cmd) == 1)
+        if (redirecter(shell, shell->cmd) == 1)
         {
             close_fds();
             return 0;

@@ -53,8 +53,7 @@ int redirection_mode (t_shell * shell ,t_command *cmd, t_redirect * analyser)
     }
     else if (analyser->type == 3) 
     {
-        cmd->fd_in =  dup(cmd->fd1_here);  
-        close (cmd->fd1_here);
+        cmd->fd_in = dup(cmd->fd1_here);
     }
     return (0);
 }
@@ -62,11 +61,9 @@ int redirection_mode (t_shell * shell ,t_command *cmd, t_redirect * analyser)
 int redirecter (t_shell *shell , t_command *cmd)
 {
     t_redirect *analyser;
-
     analyser = cmd->redirects;
     if (analyser)
     {            
-
         while (analyser)
         {
             if (redirection_mode (shell,cmd,analyser) == 1)
