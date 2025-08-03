@@ -87,7 +87,6 @@ void exec_f_x_ok(t_command *cmd , char * axe)
 void relative_path(t_shell *shell, t_command  *cmd)
 {
     t_relat s;
-
     s.env_p = ft_getenv(shell->env,"PATH");
     if (!s.env_p)
         env_p_null(shell,cmd);

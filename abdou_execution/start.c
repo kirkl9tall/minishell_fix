@@ -150,8 +150,6 @@ int fathers_command(t_shell *shell, t_command * cmd)
 
 int start(t_shell *shell)
 {
-    // t_command *analyzer;
-    // analyzer = shell->cmd;
     init_fds(shell);
     signal(SIGINT,SIG_IGN);
     if (check_heredoc(shell))

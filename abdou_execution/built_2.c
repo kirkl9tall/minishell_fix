@@ -46,11 +46,14 @@ void check_analyser_troubles(t_shell *shell,t_command *cmd)
 {
     if (redirecter(shell,cmd) == 1)
     {
+        free_env(shell->env);
+        gr_t(NULL , 1);
         close_fds();
         exit(1);
     }
     if (!cmd->args || !cmd->args[0])
     {
+        free_env(shell->env);
         gr_t(NULL , 1);
         close_fds();
         exit(0);
@@ -70,6 +73,7 @@ void analyser_command(t_shell *shell,t_command *cmd)
     signal(SIGQUIT, shell->defau_sigq);
     cmd->fd_out = 1;
     cmd->fd_in = 0;
+    
     check_analyser_troubles(shell,cmd);
     analyse_check_dups(cmd);
     if (check_func_buil(shell,cmd) == 1)
