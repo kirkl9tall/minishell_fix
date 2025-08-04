@@ -6,7 +6,7 @@
 /*   By: abismail <abismail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 10:25:20 by abismail          #+#    #+#             */
-/*   Updated: 2025/08/04 10:26:10 by abismail         ###   ########.fr       */
+/*   Updated: 2025/08/04 11:27:23 by abismail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,15 +75,14 @@ void	child_heredoc_exec(t_shell *shell, t_command *analyser, t_redirect *tmp)
 		if (ft_strcmp(line, tmp->delimiter) == 0)
 			break ;
 		shell->line = line;
-		write(analyser->fd_here, expand_herdoc(line, shell),
-			ft_strlen(expand_herdoc(line, shell)));
+		if (tmp->quotes == 1)
+			write(analyser->fd_here, expand_herdoc(line, shell),
+				ft_strlen(expand_herdoc(line, shell)));
+		else
+			write(analyser->fd_here, line, ft_strlen(line));
 		write(analyser->fd_here, "\n", 1);
 		free(line);
 	}
-	free_env(shell->env);
-	gr_t(NULL, 1);
-	close_fds();
-	exit(0);
 }
 
 int	type_three_heredoc(t_shell *shell, t_command *analyser, t_redirect *tmp)

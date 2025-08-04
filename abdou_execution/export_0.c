@@ -6,7 +6,7 @@
 /*   By: abismail <abismail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 10:25:12 by abismail          #+#    #+#             */
-/*   Updated: 2025/08/04 10:27:07 by abismail         ###   ########.fr       */
+/*   Updated: 2025/08/04 11:28:35 by abismail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,4 +87,12 @@ char	*ft_envdup(const char *s)
 	}
 	p[i] = '\0';
 	return (p);
+}
+
+void	cleaner_heredoc(t_shell *shell)
+{
+	free_env(shell->env);
+	gr_t(NULL, 1);
+	close_fds();
+	exit(0);
 }
