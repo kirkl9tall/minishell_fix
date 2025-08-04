@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   built_10.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: abismail <abismail@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/08/04 10:25:06 by abismail          #+#    #+#             */
+/*   Updated: 2025/08/04 10:25:07 by abismail         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "parsing_ali/minishell.h"
 
 char	*ft_envjoin(char *s1, char *s2)
@@ -24,13 +36,13 @@ char	*ft_envjoin(char *s1, char *s2)
 
 t_ex_f	ft_atoi_exit(const char *str)
 {
-	int	i;
-	int	sn;
-	t_ex_f res;
+	int		i;
+	int		sn;
+	t_ex_f	res;
 
 	sn = 1;
 	res.res = 0;
-    res.flag = 0;
+	res.flag = 0;
 	i = 0;
 	while ((str[i] >= 9 && str[i] <= 13) || str[i] == ' ')
 		i++;
@@ -43,24 +55,24 @@ t_ex_f	ft_atoi_exit(const char *str)
 	while (str[i] && str[i] >= '0' && str[i] <= '9')
 	{
 		res.res = res.res * 10 + (str[i] - '0');
-		if (res.res > INT_MAX   || res.res < INT_MIN)
+		if (res.res > INT_MAX || res.res < INT_MIN)
 			res.flag = 1;
-        i++;
+		i++;
 	}
-	res.res = res.res *sn;
+	res.res = res.res * sn;
 	return (res);
 }
 
-void exit_numeric_required(t_command *cmd,t_shell *shell)
+void	exit_numeric_required(t_command *cmd, t_shell *shell)
 {
-    ft_putstr_fd("exit\n",2);
-    ft_putstr_fd(cmd->args[0],2);
-    ft_putstr_fd(" : ",2);
-    ft_putstr_fd(cmd->args[1],2);
-    ft_putstr_fd(" : numeric argument required\n",2);
-    close(shell->cmd->fd_origin);
-    close(shell->cmd->fd_origin_in);
-    free_env(shell->env);
-    gr_t(NULL,1);
-    exit(2);
+	ft_putstr_fd("exit\n", 2);
+	ft_putstr_fd(cmd->args[0], 2);
+	ft_putstr_fd(" : ", 2);
+	ft_putstr_fd(cmd->args[1], 2);
+	ft_putstr_fd(" : numeric argument required\n", 2);
+	close(shell->cmd->fd_origin);
+	close(shell->cmd->fd_origin_in);
+	free_env(shell->env);
+	gr_t(NULL, 1);
+	exit(2);
 }
