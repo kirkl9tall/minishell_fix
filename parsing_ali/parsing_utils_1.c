@@ -3,14 +3,34 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_utils_1.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: a-khairi <a-khairi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: abismail <abismail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/01 12:27:56 by a-khairi          #+#    #+#             */
-/*   Updated: 2025/07/24 10:28:13 by a-khairi         ###   ########.fr       */
+/*   Updated: 2025/08/04 11:49:44 by abismail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	signal_handler(int sig)
+{
+	t_shell	*shell;
+
+	(void)sig;
+	write(1, "\n", 1);
+	rl_replace_line("", 0);
+	rl_on_new_line();
+	rl_redisplay();
+	shell = var_ali();
+	shell->exit_statut = 130;
+}
+
+int	ft_isspace(int c)
+{
+	if (c == ' ' || (c >= 9 && c <= 13))
+		return (1);
+	return (0);
+}
 
 int	only_spaces(const char *s)
 {
@@ -18,7 +38,7 @@ int	only_spaces(const char *s)
 		return (0);
 	while (*s)
 	{
-		if (!isspace((unsigned char)*s))
+		if (!ft_isspace((unsigned char)*s))
 			return (0);
 		s++;
 	}

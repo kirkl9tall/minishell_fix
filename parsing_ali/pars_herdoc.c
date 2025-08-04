@@ -6,13 +6,12 @@
 /*   By: a-khairi <a-khairi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 18:03:44 by a-khairi          #+#    #+#             */
-/*   Updated: 2025/07/22 10:21:32 by a-khairi         ###   ########.fr       */
+/*   Updated: 2025/08/03 19:52:00 by a-khairi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-//--------------------------------------------------------//
 static int	pars_delimter(int *i, char *delim, char **token)
 {
 	int		start;

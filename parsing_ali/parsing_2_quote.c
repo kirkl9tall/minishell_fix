@@ -6,7 +6,7 @@
 /*   By: a-khairi <a-khairi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/24 18:20:39 by a-khairi          #+#    #+#             */
-/*   Updated: 2025/07/24 10:31:24 by a-khairi         ###   ########.fr       */
+/*   Updated: 2025/08/03 21:35:29 by a-khairi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ static int	process_char(int *i, t_shell *shell, char **token)
 		return (handle_plain_text_token(i, shell->line, token));
 }
 
-char	*frist_quote_content(int *i, t_shell *shell, int *flag)
+char	*analys_token(int *i, t_shell *shell, int *flag)
 {
 	char	*token;
 	int		err;
@@ -73,7 +73,7 @@ char	*frist_quote_content(int *i, t_shell *shell, int *flag)
 	token = NULL;
 	err = 0;
 	shell->flag_ex = 0;
-	while (shell->line[*i] && !isspace(shell->line[*i])
+	while (shell->line[*i] && !ft_isspace(shell->line[*i])
 		&& shell->line[*i] != '|' && shell->line[*i] != '<'
 		&& shell->line[*i] != '>')
 	{

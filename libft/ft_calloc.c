@@ -6,7 +6,7 @@
 /*   By: abismail <abismail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/03 18:21:46 by a-khairi          #+#    #+#             */
-/*   Updated: 2025/07/30 21:03:40 by abismail         ###   ########.fr       */
+/*   Updated: 2025/08/04 11:41:28 by abismail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,7 @@ void	*ft_calloc(size_t nmemb, size_t size)
 	void	*p;
 
 	p = malloc(nmemb * size);
-    gr_t(p , 0);
-	// if (p == NULL)
-	// 	return (NULL);
+	gr_t(p, 0);
 	ft_memset(p, 0, nmemb * size);
 	return (p);
 }

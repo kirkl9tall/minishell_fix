@@ -37,6 +37,7 @@ SRCS = parsing_ali/check_ambiguous.c \
 		abdou_execution/export_0.c \
 		abdou_execution/export.c \
 		abdou_execution/export_2.c \
+		minishell.c \
 
 OBJS = $(SRCS:.c=.o)
 

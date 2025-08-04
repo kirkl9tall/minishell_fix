@@ -6,7 +6,7 @@
 /*   By: a-khairi <a-khairi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/24 18:15:00 by a-khairi          #+#    #+#             */
-/*   Updated: 2025/07/24 10:28:27 by a-khairi         ###   ########.fr       */
+/*   Updated: 2025/08/03 21:31:39 by a-khairi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static int	build_token(int *i, t_shell *shell, char **token)
 	int		err;
 
 	flag = 0;
-	first = frist_quote_content(i, shell, &flag);
+	first = analys_token(i, shell, &flag);
 	err = 0;
 	if (flag)
 		err = 1;
@@ -73,7 +73,7 @@ static int	handle_split_tokens(char *token, t_shell *shell)
 	return (handle_split_tokens_loop(splits, count, shell));
 }
 
-int	handle_quotes(int *i, t_shell *shell)
+int	lexical(int *i, t_shell *shell)
 {
 	char	*token;
 

@@ -6,7 +6,7 @@
 /*   By: a-khairi <a-khairi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 10:35:59 by a-khairi          #+#    #+#             */
-/*   Updated: 2025/07/24 10:41:49 by a-khairi         ###   ########.fr       */
+/*   Updated: 2025/08/03 21:30:41 by a-khairi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 static int	only_sep(const char *str, const char *sep, const char *sep_2)
 {
-	int		sep_len;
-	int		i;
+	int	sep_len;
+	int	i;
 
 	if (!str || !sep)
 		return (0);

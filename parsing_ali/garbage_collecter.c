@@ -3,14 +3,27 @@
 /*                                                        :::      ::::::::   */
 /*   garbage_collecter.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abismail <abismail@student.42.fr>          +#+  +:+       +#+        */
+/*   By: a-khairi <a-khairi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/23 21:14:17 by a-khairi          #+#    #+#             */
-/*   Updated: 2025/08/01 10:18:50 by abismail         ###   ########.fr       */
+/*   Updated: 2025/08/03 21:32:57 by a-khairi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	free_env(t_env *env)
+{
+	t_env	*tmp;
+
+	while (env)
+	{
+		tmp = env;
+		env = env->next;
+		free(tmp->env);
+		free(tmp);
+	}
+}
 
 static void	add_back(t_gc *gr, t_gc *new)
 {
@@ -61,7 +74,7 @@ void	gr_t(void *str, int flag)
 	else
 	{
 		gr = free_gc_list(gr);
-		if(!flag)
-			exit(2); //? free env
+		if (!flag)
+			exit(2);
 	}
 }

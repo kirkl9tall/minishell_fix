@@ -6,13 +6,12 @@
 /*   By: a-khairi <a-khairi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 18:40:02 by a-khairi          #+#    #+#             */
-/*   Updated: 2025/07/24 10:35:12 by a-khairi         ###   ########.fr       */
+/*   Updated: 2025/08/03 20:44:58 by a-khairi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-//--------------------------------------------------------------//
 t_redirect	*create_redirect_node(char *file, int append, int *flag)
 {
 	t_redirect	*new;
@@ -81,7 +80,6 @@ char	*get_delimiter(char *line, int *i)
 	return (ft_strdup(token));
 }
 
-//--------------------------------------------------------------//
 static void	copy_args(char **new_args, char **old_args, int count, char *rnd)
 {
 	int	j;
@@ -125,4 +123,3 @@ void	set_args(t_command *cmd, char *arg, t_random *rend)
 	new_args[count + 1] = NULL;
 	cmd->args = new_args;
 }
-//--------------------------------------------------------------//

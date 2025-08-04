@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_expansion_1.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abismail <abismail@student.42.fr>          +#+  +:+       +#+        */
+/*   By: a-khairi <a-khairi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/24 18:22:21 by a-khairi          #+#    #+#             */
-/*   Updated: 2025/07/31 12:19:47 by abismail         ###   ########.fr       */
+/*   Updated: 2025/08/03 19:56:54 by a-khairi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,12 @@ char	*extract_var_part(t_shell *shell, int *i)
 	return (part);
 }
 
+int	is_special_dollar_case(t_shell *shell, int *i)
+{
+	return (shell->line[*i] == '$' && !ft_isalnum(shell->line[*i + 1])
+		&& shell->line[*i + 1] != '_' && shell->line[*i + 1] != '?');
+}
+
 char	*varible_ex(t_shell *shell, int *i, char **token, int *flag)
 {
 	char	*part;
@@ -80,10 +86,4 @@ char	*varible_ex(t_shell *shell, int *i, char **token, int *flag)
 	if (is_fully_empty_case(token, part, shell, k))
 		return (*flag = 0, part);
 	return (part);
-}
-
-int	is_special_dollar_case(t_shell *shell, int *i)
-{
-	return (shell->line[*i] == '$' && !ft_isalnum(shell->line[*i + 1])
-		&& shell->line[*i + 1] != '_' && shell->line[*i + 1] != '?');
 }

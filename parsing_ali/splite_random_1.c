@@ -97,5 +97,5 @@ char	**merge_tokens_if_rnd2(char **tokens, int *count, t_random *rend)
 		else
 			data.new_tokens[data.j++] = data.tokens[data.i++];
 	}
-	return (data.new_tokens[data.j] = NULL,*count = data.j, data.new_tokens);
+	return (data.new_tokens[data.j] = NULL, *count = data.j, data.new_tokens);
 }

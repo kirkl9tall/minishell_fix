@@ -6,7 +6,7 @@
 /*   By: abismail <abismail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/03 18:23:57 by a-khairi          #+#    #+#             */
-/*   Updated: 2025/07/30 21:03:45 by abismail         ###   ########.fr       */
+/*   Updated: 2025/08/04 11:42:41 by abismail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,9 +51,7 @@ char	*ft_itoa(int n)
 	n_len = ft_nbrlen(n);
 	i = n;
 	p = malloc((n_len + 1) * sizeof(char));
-    gr_t(p , 0);
-	// if (!p)
-	// 	return (NULL);
+	gr_t(p, 0);
 	p[n_len] = '\0';
 	if (i == 0)
 	{

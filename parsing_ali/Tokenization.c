@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Tokenization.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abismail <abismail@student.42.fr>          +#+  +:+       +#+        */
+/*   By: a-khairi <a-khairi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 11:08:11 by a-khairi          #+#    #+#             */
-/*   Updated: 2025/08/03 15:46:19 by abismail         ###   ########.fr       */
+/*   Updated: 2025/08/03 21:32:17 by a-khairi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ t_env	*fill_env(char **envp)
 	return (head);
 }
 
-int	check_token(t_shell *shell)
+int	start_process(t_shell *shell)
 {
 	int	i;
 
@@ -69,7 +69,7 @@ int	check_token(t_shell *shell)
 		if (shell->line[i] && shell->line[i] != ' ' && shell->line[i] != '|'
 			&& shell->line[i] != '<' && shell->line[i] != '>')
 		{
-			if (handle_quotes(&i, shell))
+			if (lexical(&i, shell))
 				return (1);
 		}
 		else if (shell->line[i] == '|')
@@ -83,82 +83,5 @@ int	check_token(t_shell *shell)
 			i++;
 		skip_spaces(&i, shell->line);
 	}
-	return (0);
-}
-void signal_handler(int sig)
-{
-	t_shell *shell;
-	
-	(void)sig;
-	write(1, "\n", 1);
-	rl_replace_line("", 0);
-	rl_on_new_line();
-	rl_redisplay();
-	shell = var_ali();
-	shell->exit_statut = 130;
-}
-void free_env(t_env *env)
-{
-	t_env *tmp;
-	while(env)
-	{
-		tmp = env;
-		env = env->next;
-		free(tmp->env);
-		free(tmp);
-	}
-}
-int	main(int ac, char **av, char **envp)
-{
-	t_shell	*shell;
-
-	shell = var_ali();
-	shell->env = fill_env(envp);
-	(void)ac;
-	(void)**av;
-	shell->exit_statut = 0;
-	shell->defau_sigc = signal(SIGINT, signal_handler);
-	shell->defau_sigq = signal(SIGQUIT, SIG_IGN);
-	while (1)
-	{
-		signal(SIGINT, signal_handler);
-		shell->rend.rnd_1 = randomize();
-		shell->rend.rnd_2 = randomize();
-		shell->rend.rnd_3 = randomize();
-		shell->rend.space = 0;
-		shell->token_list = NULL;
-		shell->line = readline("minishell$ ");
-		if (!shell->line)
-		{
-			gr_t(NULL, 1);
-			free_env(shell->env);
-			break ;
-		}
-		if (check_token(shell))
-		{
-			gr_t(NULL, 1);
-			free(shell->line);
-			continue ;
-		}
-		if (error_pipe(shell->token_list)
-			|| error_redirection(shell->token_list))
-		{
-			ft_putstr_fd("syntax error near unexpected token\n", 2);
-			gr_t(NULL, 1);
-			free(shell->line);
-			shell->line = NULL;
-			shell->exit_statut = 2 << 8;
-			continue ;
-		}
-		shell->cmd = parse_input_linkedlist(shell->token_list, &shell->rend);
-		// print_commands(shell->cmd);
-		if (shell->cmd)
-			start(shell);
-		if (shell->line)
-			add_history(shell->line);
-		free(shell->line);
-		shell->line = NULL;
-	}
-	gr_t(NULL, 1);
 	return (0);
 }

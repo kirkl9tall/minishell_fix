@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   set_input_list_1.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abismail <abismail@student.42.fr>          +#+  +:+       +#+        */
+/*   By: a-khairi <a-khairi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/24 18:24:40 by a-khairi          #+#    #+#             */
-/*   Updated: 2025/07/28 11:19:53 by abismail         ###   ########.fr       */
+/*   Updated: 2025/08/03 21:48:34 by a-khairi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,6 @@ static t_command	*create_command(void)
 	cmd->next = NULL;
 	return (cmd);
 }
-
-//-------------------------------------------------------------//
 
 static void	parse_input_help(t_token_node *node, t_command *cmd, t_random *rend)
 {
