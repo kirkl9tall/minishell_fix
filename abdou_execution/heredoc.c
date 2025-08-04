@@ -6,7 +6,7 @@
 /*   By: abismail <abismail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 10:25:20 by abismail          #+#    #+#             */
-/*   Updated: 2025/08/04 11:27:23 by abismail         ###   ########.fr       */
+/*   Updated: 2025/08/04 15:14:27 by abismail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,8 @@ void	child_heredoc_exec(t_shell *shell, t_command *analyser, t_redirect *tmp)
 		write(analyser->fd_here, "\n", 1);
 		free(line);
 	}
+	free(line);
+	free_herdoc_child(shell);
 }
 
 int	type_three_heredoc(t_shell *shell, t_command *analyser, t_redirect *tmp)

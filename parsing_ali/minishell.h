@@ -6,7 +6,7 @@
 /*   By: abismail <abismail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 11:08:25 by a-khairi          #+#    #+#             */
-/*   Updated: 2025/08/04 11:54:26 by abismail         ###   ########.fr       */
+/*   Updated: 2025/08/04 15:07:00 by abismail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -330,4 +330,5 @@ void		child_pipe(t_shell *shell, t_command *cmd, t_hp s);
 void		wait_childs(t_shell *shell, t_hp s);
 void		cleaner_heredoc(t_shell *shell);
 void		signal_handler(int sig);
+void		free_herdoc_child (t_shell *shell);
 #endif
