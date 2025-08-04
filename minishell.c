@@ -6,7 +6,7 @@
 /*   By: abismail <abismail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 21:00:34 by a-khairi          #+#    #+#             */
-/*   Updated: 2025/08/04 16:13:26 by abismail         ###   ########.fr       */
+/*   Updated: 2025/08/04 17:53:22 by abismail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ void	handle_input(t_shell *shell)
 		start(shell);
 	if (shell->line)
 		add_history(shell->line);
-	// free(shell->line);
 	shell->line = NULL;
 }
 
@@ -36,32 +35,28 @@ void	continue_syntax(t_shell *shell)
 	add_history(shell->line);
 	ft_putstr_fd("syntax error near unexpected token\n", 2);
 	gr_t(NULL, 1);
-	// free(shell->line);
 	shell->line = NULL;
 	shell->exit_statut = 2 << 8;
 }
 
 void	loop_shell(t_shell *shell)
 {
+	char *input;
+	
 	while (1)
 	{
 		signal(SIGINT, signal_handler);
 		set_rend(shell);
 		shell->token_list = NULL;
-		char *input = readline("minishell$ ");
+		input = readline("minishell$ ");
 		shell->line = ft_strdup(input);
 		free(input);
 		if (!shell->line)
-		{
-			free_env(shell->env);
-			gr_t(NULL, 1);
-			return ;
-		}
+			return (free_env(shell->env), gr_t(NULL, 1));
 		if (start_process(shell))
 		{
 			add_history(shell->line);
 			gr_t(NULL, 1);
-			// free(shell->line);
 		}
 		else if (error_pipe(shell->token_list)
 			|| error_redirection(shell->token_list))
