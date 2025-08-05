@@ -6,19 +6,20 @@
 /*   By: abismail <abismail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 10:24:36 by abismail          #+#    #+#             */
-/*   Updated: 2025/08/04 15:06:41 by abismail         ###   ########.fr       */
+/*   Updated: 2025/08/05 14:04:35 by abismail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parsing_ali/minishell.h"
 
-void free_herdoc_child (t_shell *shell)
+void	free_herdoc_child(t_shell *shell)
 {
 	free_env(shell->env);
-    gr_t(NULL,1);
-    close_fds();
-    exit(0);
+	gr_t(NULL, 1);
+	close_fds();
+	exit(0);
 }
+
 void	dup_close(t_command *cmd)
 {
 	dup2(cmd->fd_origin, 1);

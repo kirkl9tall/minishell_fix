@@ -6,7 +6,7 @@
 /*   By: abismail <abismail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 10:25:27 by abismail          #+#    #+#             */
-/*   Updated: 2025/08/04 10:27:45 by abismail         ###   ########.fr       */
+/*   Updated: 2025/08/04 22:41:09 by abismail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,13 +82,17 @@ int	fathers_command(t_shell *shell, t_command *cmd)
 
 int	start(t_shell *shell)
 {
-	int	f;
+	int			f;
+	t_shell		*herd;
+	t_command	*check;
 
+	herd = shell;
+	check = shell->cmd;
 	init_fds(shell);
 	signal(SIGINT, SIG_IGN);
-	if (check_heredoc(shell))
+	if (check_heredoc(herd))
 		return (0);
-	f = check_cmd(shell->cmd);
+	f = check_cmd(check);
 	if (!f)
 	{
 		close_fds();

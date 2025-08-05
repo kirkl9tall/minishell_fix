@@ -6,7 +6,7 @@
 /*   By: abismail <abismail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 10:24:39 by abismail          #+#    #+#             */
-/*   Updated: 2025/08/04 10:27:34 by abismail         ###   ########.fr       */
+/*   Updated: 2025/08/04 22:40:55 by abismail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,23 +26,23 @@ int	check_cmd(t_command *cmd)
 	t_redirect	*redirects;
 	int			i;
 
-	redirects = cmd->redirects;
 	i = 0;
 	trav = cmd;
 	while (trav)
 	{
 		if (trav->args)
 			i++;
-		trav = trav->next;
-	}
-	if (redirects)
-	{
-		while (redirects)
+		redirects = trav->redirects;
+		if (redirects)
 		{
-			if (redirects->type != 3)
-				i++;
-			redirects = redirects->next;
+			while (redirects)
+			{
+				if (redirects->type != 3)
+					i++;
+				redirects = redirects->next;
+			}
 		}
+		trav = trav->next;
 	}
 	return (i);
 }

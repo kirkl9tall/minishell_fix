@@ -6,7 +6,7 @@
 /*   By: abismail <abismail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 21:00:34 by a-khairi          #+#    #+#             */
-/*   Updated: 2025/08/04 17:53:22 by abismail         ###   ########.fr       */
+/*   Updated: 2025/08/04 22:28:35 by abismail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ void	set_rend(t_shell *shell)
 void	handle_input(t_shell *shell)
 {
 	shell->cmd = parse_input_linkedlist(shell->token_list, &shell->rend);
+	// print_commands(shell->cmd);
 	if (shell->cmd)
 		start(shell);
 	if (shell->line)
