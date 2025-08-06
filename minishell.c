@@ -3,30 +3,28 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abismail <abismail@student.42.fr>          +#+  +:+       +#+        */
+/*   By: a-khairi <a-khairi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 21:00:34 by a-khairi          #+#    #+#             */
-/*   Updated: 2025/08/04 22:28:35 by abismail         ###   ########.fr       */
+/*   Updated: 2025/08/06 10:51:10 by a-khairi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "parsing_ali/minishell.h"
+#include "parsing/minishell.h"
 
 void	set_rend(t_shell *shell)
 {
 	shell->rend.rnd_1 = randomize();
 	shell->rend.rnd_2 = randomize();
 	shell->rend.rnd_3 = randomize();
-	shell->rend.space = 0;
 }
 
 void	handle_input(t_shell *shell)
 {
 	shell->cmd = parse_input_linkedlist(shell->token_list, &shell->rend);
-	// print_commands(shell->cmd);
 	if (shell->cmd)
 		start(shell);
-	if (shell->line)
+	if (shell->line && shell->line[0] != '\0')
 		add_history(shell->line);
 	shell->line = NULL;
 }
@@ -42,8 +40,8 @@ void	continue_syntax(t_shell *shell)
 
 void	loop_shell(t_shell *shell)
 {
-	char *input;
-	
+	char	*input;
+
 	while (1)
 	{
 		signal(SIGINT, signal_handler);
@@ -53,7 +51,7 @@ void	loop_shell(t_shell *shell)
 		shell->line = ft_strdup(input);
 		free(input);
 		if (!shell->line)
-			return (free_env(shell->env), gr_t(NULL, 1));
+			return (signal_handler_q(0));
 		if (start_process(shell))
 		{
 			add_history(shell->line);
@@ -82,4 +80,4 @@ int	main(int ac, char **av, char **envp)
 	gr_t(NULL, 1);
 	return (0);
 }
-//// print_commands(shell->cmd);
+// print_commands(shell->cmd);

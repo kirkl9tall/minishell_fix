@@ -14,7 +14,7 @@
 
 # include <unistd.h>
 # include <stdlib.h>
-# include "../parsing_ali/minishell.h"
+# include "../parsing/minishell.h"
 
 typedef struct s_list
 {
@@ -57,7 +57,6 @@ void	ft_putstr_fd(char *s, int fd);
 void	ft_putendl_fd(char *s, int fd);
 int		ft_strcmp(const char *s1, const char *s2);
 void	ft_putnbr_fd(int n, int fd);
-void	*ft_realloc(void *ptr, size_t old_size, size_t new_size);
 char	*ft_strstr(const char *haystack, const char *needle);
 char	*ft_strncpy(char *dst, const char *src, size_t n);
 // parte bonnus
