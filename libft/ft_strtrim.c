@@ -6,7 +6,7 @@
 /*   By: abismail <abismail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/03 20:32:59 by a-khairi          #+#    #+#             */
-/*   Updated: 2025/07/30 21:06:01 by abismail         ###   ########.fr       */
+/*   Updated: 2025/08/04 11:42:22 by abismail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,7 @@ char	*ft_strtrim(const char *s1, const char *set)
 	while (len > i && ft_strchr(set, s1[len - 1]))
 		len--;
 	p = (char *)malloc(len - i + 1);
-    gr_t(p , 0);
-	// if (!p)
-	// 	return (NULL);
+	gr_t(p, 0);
 	ft_strlcpy(p, &s1[i], len - i + 1);
 	return (p);
 }

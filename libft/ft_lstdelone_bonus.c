@@ -6,7 +6,7 @@
 /*   By: abismail <abismail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 20:19:40 by a-khairi          #+#    #+#             */
-/*   Updated: 2025/07/30 21:21:25 by abismail         ###   ########.fr       */
+/*   Updated: 2025/08/04 11:41:38 by abismail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@ void	ft_lstdelone(t_list *lst, void (*del)(void *))
 	if (!lst)
 		return ;
 	del(lst->content);
-	// free(lst);
 	lst = NULL;
 }
 

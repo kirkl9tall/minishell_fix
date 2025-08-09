@@ -2,6 +2,10 @@
     "files.associations": {
         "algorithm": "c",
         "minishell.h": "c",
-        "sstream": "c"
+        "sstream": "c",
+        "chrono": "c",
+        "text_encoding": "c",
+        "typeinfo": "c",
+        "stdio.h": "c"
     }
 }

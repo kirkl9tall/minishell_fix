@@ -6,7 +6,7 @@
 /*   By: abismail <abismail@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 15:15:31 by a-khairi          #+#    #+#             */
-/*   Updated: 2025/07/30 21:13:51 by abismail         ###   ########.fr       */
+/*   Updated: 2025/08/04 11:42:02 by abismail         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,7 @@ static char	*ft_strdup1(const char *str, int start, int end)
 
 	i = 0;
 	copy = malloc(end - start + 1);
-	gr_t(copy , 0);
-	// if (!copy)
-	// 	return (NULL);
+	gr_t(copy, 0);
 	while (start < end)
 		copy[i++] = str[start++];
 	copy[i] = '\0';
@@ -100,9 +98,7 @@ char	**ft_split(const char *str, char c)
 		return (NULL);
 	size = (count_word(str, c) + 1);
 	p = malloc(sizeof(char *) * size);
-    gr_t(p , 0);
-	// if (!p)
-	// 	return (NULL);
+	gr_t(p, 0);
 	p[size - 1] = NULL;
 	free_malloc(p, str, c);
 	return (p);
